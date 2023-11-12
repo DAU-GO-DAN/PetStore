@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class PetOnStoreBUS {
     public ArrayList<PetOnStoreDTO> petList;
-    static PetOnStoreDAO petData = new PetOnStoreDAO();
+    static private PetOnStoreDAO petData = new PetOnStoreDAO();
 
     public PetOnStoreBUS() {
         readData();

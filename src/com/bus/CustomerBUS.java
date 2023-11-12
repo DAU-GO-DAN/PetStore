@@ -157,4 +157,17 @@ public class CustomerBUS {
     public boolean isNum(String s){
         return s.matches("\\d+");
     }
+    
+    public String getName(String ID)
+    {
+        String name = "";
+        for(CustomerDTO customer : cusList)
+        {
+            if(customer.getCusID().equalsIgnoreCase(ID))
+            {
+                name = customer.getCusName();
+            }
+        }
+        return name;
+    }
 }

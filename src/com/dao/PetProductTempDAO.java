@@ -22,12 +22,12 @@ import javax.swing.JOptionPane;
  *
  * @author DUC PHU
  */
-public class PetProductDAO {
+public class PetProductTempDAO {
     Connection conn = null;
     Statement stmt = null;
     ResultSet rs = null;
 
-    public PetProductDAO() {
+    public PetProductTempDAO() {
         conn = MyConnection.getConnection();
     }
     
@@ -79,7 +79,7 @@ public class PetProductDAO {
         try{
             String qry = "Update PetProduct "
                     + " set "
-                    + " petName = N'" +product.getName()+"', "
+                    + " name = N'" +product.getName()+"', "
                     + " soldPrice = " +product.getSoldPrice()+", "
                     + " importPrice = " +product.getImportPrice()+", "
                     + " Description = N'" +product.getDescription()+"', "
@@ -113,19 +113,19 @@ public class PetProductDAO {
         }
     }
     
-    public ArrayList readPetProductList()
+    public ArrayList readList()
     {
-        ArrayList list = new ArrayList<PetProductDTO>();
-        
-        try {
+        ArrayList<PetProductDTO> list = new ArrayList<>();
+        try{
             String qry = "Select * from PetProduct ";
+//            System.out.println(""+qry);
             stmt = conn.createStatement();
             rs = stmt.executeQuery(qry);
             while(rs.next())
             {
                 PetProductDTO product = new PetProductDTO();
-                product.setId(rs.getString("petID"));
-                product.setName(rs.getString("petName"));
+                product.setId(rs.getString("ID"));
+                product.setName(rs.getString("name"));
                 product.setSoldPrice(Long.parseLong(rs.getString("soldPrice")));
                 product.setImportPrice(Long.parseLong(rs.getString("importPrice")));
                 product.setDescription(rs.getString("Description"));
@@ -134,13 +134,13 @@ public class PetProductDAO {
                 product.setInStock(Integer.parseInt(rs.getString("inStock")));
                 product.setImageUrl(rs.getString("imageUrl"));
                 list.add(product);
-                System.out.println("id :"+rs.getString("petID"));
+//                System.out.println("id :"+rs.getString("petID"));
             }
         }
         catch(SQLException ex){
-            
+            ex.printStackTrace();
         }
-        System.out.println("list size :"+list.size());
+//        System.out.println("list size :"+list.size());
         return list;
         
     }

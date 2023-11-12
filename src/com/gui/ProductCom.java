@@ -97,7 +97,7 @@ public class ProductCom extends javax.swing.JPanel {
         setImage();
         String price = valid.formatMoney(product.getSoldPrice());
         lbSoldPrice.setText(""+price);
-        lbNameID.setText(""+product.getName()+ " "+product.getId());
+        lbNameID.setText(""+product.getId()+ " "+product.getName());
     }// </editor-fold>//GEN-END:initComponents
 
     private void svgEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_svgEditMouseClicked
@@ -106,6 +106,18 @@ public class ProductCom extends javax.swing.JPanel {
         {
             PetOnStoreDTO petTemp = (PetOnStoreDTO) product;
             PetOnStoreDetail detailForm = new PetOnStoreDetail(petTemp, ui);
+            detailForm.setVisible(true);
+        }
+        else if(product instanceof PetProductDTO)
+        {
+            PetProductDTO productTemp = (PetProductDTO) product;
+            PetProductDetail detailForm = new PetProductDetail(productTemp);
+            detailForm.setVisible(true);
+        }
+        else if(product instanceof SoldPetDTO)
+        {
+            SoldPetDTO petTemp = (SoldPetDTO) product;
+            SoldPetDetail detailForm = new SoldPetDetail(petTemp);
             detailForm.setVisible(true);
         }
         

@@ -49,9 +49,9 @@
                       <Component id="tfImportPrice" alignment="0" min="-2" pref="207" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jLabel12" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
-                  <Component id="tfName" alignment="0" min="-2" pref="207" max="-2" attributes="0"/>
+                  <Component id="tfName" alignment="0" min="-2" pref="288" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="320" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel8" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
                   <Component id="tfColor" alignment="0" min="-2" pref="207" max="-2" attributes="0"/>

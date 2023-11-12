@@ -24,6 +24,7 @@ public class BreedChooser extends javax.swing.JFrame {
     PetOnStoreDetail petForm;
     AddPetForm addForm;
     private ArrayList<BreedDTO> matchList;
+    Validator valid = new Validator();
     public BreedChooser(BreedBUS breed, PetOnStoreDetail petForm, String flag) {
         this.flag = flag;
         this.breed = breed;
@@ -131,9 +132,9 @@ public class BreedChooser extends javax.swing.JFrame {
 
     private void tfSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyPressed
         // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        
             refresh();
-        }
+        
     }//GEN-LAST:event_tfSearchKeyPressed
 
     private String cleanString(String text)
@@ -172,9 +173,11 @@ public class BreedChooser extends javax.swing.JFrame {
     
     private void refresh()
     {
-        String text = cleanString(tfSearch.getText());
+        String text = valid.normalizeString(cleanString(tfSearch.getText())).toLowerCase();
+        System.out.println("text search: "+text);
         
         matchList = breed.search(text);
+        
         if(text.equals(""))
         {
             defaultTable();

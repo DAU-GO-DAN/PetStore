@@ -6,8 +6,13 @@ package com.gui;
 
 import com.bus.BreedBUS;
 import com.bus.PetOnStoreBUS;
+import com.bus.PetProductBUS;
+import com.bus.SoldPetBUS;
 import com.bus.SupplierBUS;
 import com.dao.PetOnStoreDTO;
+import com.dao.PetProductDTO;
+import com.dao.ProductDTO;
+import com.dao.SoldPetDTO;
 import com.dao.SupplierDTO;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -37,7 +42,11 @@ public class ProductUI extends javax.swing.JPanel {
     /**
      * Creates new form ProductCom
      */
-    PetOnStoreBUS testBus = new PetOnStoreBUS();
+    PetOnStoreBUS POSBus = new PetOnStoreBUS();
+    PetProductBUS PetProBus = new PetProductBUS();
+    SoldPetBUS soldBus = new SoldPetBUS();
+    int hgap = 5;
+    int vgap = 5;
     public ProductUI() {
         initComponents();
         setSize(new Dimension(1280, 620));
@@ -89,6 +98,11 @@ public class ProductUI extends javax.swing.JPanel {
         lbSoldPet.setText("Thú đã bán");
         lbSoldPet.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbSoldPet.setOpaque(true);
+        lbSoldPet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbSoldPetMouseClicked(evt);
+            }
+        });
 
         lbPetProduct.setBackground(new java.awt.Color(255, 255, 255));
         lbPetProduct.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -96,6 +110,11 @@ public class ProductUI extends javax.swing.JPanel {
         lbPetProduct.setText("Sản phẩm cho thú");
         lbPetProduct.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lbPetProduct.setOpaque(true);
+        lbPetProduct.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbPetProductMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout NavBarLayout = new javax.swing.GroupLayout(NavBar);
         NavBar.setLayout(NavBarLayout);
@@ -227,27 +246,49 @@ public class ProductUI extends javax.swing.JPanel {
 
     private void svgAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_svgAddMouseClicked
         // TODO add your handling code here:
-        AddPetForm addForm = new AddPetForm(this);
+//        AddPetForm addForm = new AddPetForm(this);
+//        addForm.setVisible(true);
+
+        AddProductForm addForm = new AddProductForm();
         addForm.setVisible(true);
     }//GEN-LAST:event_svgAddMouseClicked
 
     private void lbPetOnStoreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbPetOnStoreMouseClicked
         // TODO add your handling code here:
+        Table.removeAll();
+        Table.revalidate();
+        Table.repaint();
         refreshTable();
+        svgAdd.setIcon(null);
     }//GEN-LAST:event_lbPetOnStoreMouseClicked
 
-    public void refreshTable()
+    private void lbPetProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbPetProductMouseClicked
+        // TODO add your handling code here:
+        
+        refreshPetProList();
+        svgAdd.setSVGImage("com/image/add.svg", 32, 32);
+    }//GEN-LAST:event_lbPetProductMouseClicked
+
+    private void lbSoldPetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbSoldPetMouseClicked
+        // TODO add your handling code here:
+        soldPetTable();
+        svgAdd.setIcon(null);
+    }//GEN-LAST:event_lbSoldPetMouseClicked
+
+    public void revalidateTable()
     {
         Table.removeAll();
         Table.revalidate();
         Table.repaint();
-        int hgap = 5;
-        int vgap = 5;
-        
+    }
+    
+    public void refreshTable()
+    {
+        revalidateTable();
         
         ArrayList<PetOnStoreDTO> testList = new ArrayList<>();
-        testBus.readData();
-        testList = testBus.petList;
+        POSBus.readData();
+        testList = POSBus.petList;
         
         if(testList.size() <= 6)
         {
@@ -284,10 +325,107 @@ public class ProductUI extends javax.swing.JPanel {
             }
         }
         
-        
+        Table.revalidate();
+        Table.repaint();
+    }
+    
+    public void refreshPetProList()
+    {
+        Table.removeAll();
         Table.revalidate();
         Table.repaint();
         
+        ArrayList<PetProductDTO> testList = new ArrayList<>();
+        PetProBus.readData();
+        testList = PetProBus.productList;
+        
+//        System.out.println("int 1:"+testList.size());
+//        System.out.println("int 2: "+PetProBus.productList.size());
+        
+        if(testList.size() <= 6)
+        {
+            Table.setLayout(new GridLayout(2, 3, hgap, vgap));
+            for(PetProductDTO product : testList)
+            {
+                ProductCom productCom = new ProductCom(product, this);
+                Table.add(productCom);
+            }
+            int remains = 6 - testList.size();
+            for(int i = 0; i < remains; i++)
+            {
+                EmptyProduct emp = new EmptyProduct();
+                Table.add(emp);
+            }
+        }
+        else if(testList.size() > 6)
+        {
+            int rows = 0;
+            int remains = testList.size() % 3;
+            if(remains != 0)
+            {
+                rows = (testList.size() / 3) + 1;
+            }
+            else{
+                rows = (testList.size() / 3);
+            }
+            Table.setLayout(new GridLayout(rows, 3, hgap, vgap));
+            
+            for(PetProductDTO product : testList)
+            {
+                ProductCom productCom = new ProductCom(product, this);
+                Table.add(productCom);
+            }
+        }
+        Table.revalidate();
+        Table.repaint();
+    }
+    
+    public void soldPetTable()
+    {
+        Table.removeAll();
+        Table.revalidate();
+        Table.repaint();
+        
+        ArrayList<SoldPetDTO> testList = new ArrayList<>();
+        soldBus.readData();
+        testList = soldBus.soldList;
+        
+        if(testList.size() <= 6)
+        {
+            Table.setLayout(new GridLayout(2, 3, hgap, vgap));
+            for(SoldPetDTO product : testList)
+            {
+                ProductCom productCom = new ProductCom(product, this);
+                Table.add(productCom);
+            }
+            int remains = 6 - testList.size();
+            for(int i = 0; i < remains; i++)
+            {
+                EmptyProduct emp = new EmptyProduct();
+                Table.add(emp);
+            }
+        }
+        else if(testList.size() > 6)
+        {
+            int rows = 0;
+            int remains = testList.size() % 3;
+            if(remains != 0)
+            {
+                rows = (testList.size() / 3) + 1;
+            }
+            else{
+                rows = (testList.size() / 3);
+            }
+            Table.setLayout(new GridLayout(rows, 3, hgap, vgap));
+            
+            for(SoldPetDTO product : testList)
+            {
+                ProductCom productCom = new ProductCom(product, this);
+                Table.add(productCom);
+            }
+        }
+        Table.revalidate();
+        Table.repaint();
     }
     
     

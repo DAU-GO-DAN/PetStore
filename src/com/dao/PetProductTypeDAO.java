@@ -82,7 +82,7 @@ public class PetProductTypeDAO {
         }
     }
     
-    public ArrayList readTypeList()
+    public ArrayList readList()
     {
         ArrayList list = new ArrayList<PetProductTypeDTO>();
         try{
@@ -100,7 +100,7 @@ public class PetProductTypeDAO {
         }
         catch(SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
         return list;
     }

@@ -6,6 +6,7 @@ package com.bus;
 
 import com.dao.BreedDTO;
 import com.dao.BreedDAO;
+import com.gui.Validator;
 import java.util.ArrayList;
 
 /**
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public class BreedBUS {
     public ArrayList<BreedDTO> breedList;
     static BreedDAO breedData = new BreedDAO();
+    Validator valid = new Validator();
 
     public BreedBUS() {
         readData();
@@ -88,8 +90,9 @@ public class BreedBUS {
         ArrayList<BreedDTO> matchingList = new ArrayList<>();
         for(BreedDTO breed : breedList)
         {
-            if(breed.getName().toLowerCase().contains(text.toLowerCase()))
+            if(valid.normalizeString(breed.getName()).toLowerCase().contains(valid.normalizeString(text).toLowerCase()))
             {
+                System.out.println("find text: "+valid.normalizeString(breed.getName()).toLowerCase());
                 matchingList.add(breed);
             }
         }

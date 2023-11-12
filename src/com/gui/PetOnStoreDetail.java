@@ -234,8 +234,8 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
                             .addComponent(inputImPrice))
                         .addComponent(tfImportPrice, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfName, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tfName, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 320, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfColor, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -481,7 +481,7 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         
-        int result = JOptionPane.showConfirmDialog(null, "Bạn có muốn lưu thay đổi ?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(null, "Bạn có muốn xóa ?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if( result == JOptionPane.YES_OPTION){
             petBus.delete(pet.getId());
             this.dispose();

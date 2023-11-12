@@ -8,6 +8,8 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,11 +59,18 @@ public class Validator {
         return formatter.format(amount);
     }
     
-    public String normalizeString(String input) 
-    {
-        String normalized = Normalizer.normalize(input, Form.NFD);
+    public String normalizeString(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        normalized = normalized.replaceAll("[đĐ]", "d");
         normalized = normalized.replaceAll("[^\\p{ASCII} \\t\\n\\x0B\\f\\r]", "");
         return normalized;
+    }
+    
+    public String toUIDate(LocalDate date)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dateString = date.format(formatter);
+        return dateString;
     }
     
 }
