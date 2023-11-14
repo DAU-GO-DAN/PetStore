@@ -34,13 +34,13 @@ public class MonthlyAnalysisDAO {
     public void add(MonthlyAnalysisDTO analysis)
     {
         try{
-            String qry = "insert into MonthlyAnalysis value ("
+            String qry = "insert into MonthlyAnalysis values ("
                     + "" + analysis.getMonth()+ "" 
                     + ", "+ "" + analysis.getYear()+ "" 
                     + ", "+ "'" + analysis.getProductID() + "'" 
                     + ", "+ "" + analysis.getImportPrice() + "" 
                     + ", "+ "" + analysis.getSoldPrice()+ "" 
-                    + ", "+ "'" + analysis.getSoldQuantity() + "" 
+                    + ", "+ "" + analysis.getSoldQuantity() + "" 
                     + ", "+ "" + analysis.getProfit() + "" 
                     + ")";
             stmt = conn.createStatement();
@@ -77,7 +77,7 @@ public class MonthlyAnalysisDAO {
         return isExist;
     }
     
-    public void update(int year, int month, String productID, long soldQuantity, long profit)
+    public void update(int year, int month, String productID, int soldQuantity, long profit)
     {
         try{
             String qry = " update MonthlyAnalysis "

@@ -31,6 +31,92 @@ public class BreedAnalysisDAO {
         conn = MyConnection.getConnection();
     }
     
+    public void add(BreedAnalysisDTO breed)
+    {
+        try{
+            String qry = "insert into BreedAnalysis values ("
+                    + "" + breed.getMonth()+ ""
+                    + ", "+ "" + breed.getYear()+ ""
+                    + ", "+ "'" + breed.getBreedID()+ "'"
+                    + ", "+ "" + breed.getSoldQuantity()+ ""
+                    + ", "+ "" + breed.getProfit()+ ""
+                    + " )";
+            stmt = conn.createStatement();
+            int rowsAffected = stmt.executeUpdate(qry);
+            if (rowsAffected == 1) {
+                JOptionPane.showMessageDialog(null, "Thêm analysis thành công!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Thêm analysis thất bại!");
+            }
+        }
+        catch(SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        
+    }
     
+    public boolean checkMonth(int year, int month, String breedID)
+    {
+        boolean isExist = false;
+        try{
+            String qry = "select * from BreedAnalysis"
+                    + " where month = "+month+ " and year = "+year+ " and breedID = '" +breedID+ "'";
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(qry);
+            if(rs.next())
+            {
+                isExist = true;
+            }
+        }
+        catch(SQLException ex)
+        {
+           
+        }
+        return isExist;
+    }
     
+    public void update(int year, int month, String breedID, int soldQuantity, long profit)
+    {
+        try{
+            String qry = " update BreedAnalysis "
+                    + " set "
+                    + " quantity = quantity + " +soldQuantity
+                    + ", " + " profit = profit + "+profit
+                    + " where month = "+month+ " and year = "+year+ " and breedID = '" +breedID+ "'";
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(qry);
+        }
+        catch(SQLException ex)
+        {
+            
+        }
+        
+    }
+    
+    public ArrayList readList()
+    {
+        ArrayList list = new ArrayList<BreedAnalysisDTO>();
+        try{
+            String qry = "Select * from BreedAnalysis";
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(qry);
+            while(rs.next())
+            {
+                BreedAnalysisDTO analysis = new BreedAnalysisDTO();
+                analysis.setMonth(Integer.parseInt(rs.getString("month")));
+                analysis.setYear(Integer.parseInt(rs.getString("year")));
+                analysis.setBreedID(rs.getString("breedID"));
+                analysis.setSoldQuantity(Integer.parseInt(rs.getString("quantity")));
+                analysis.setProfit(Long.parseLong(rs.getString("profit")));
+                list.add(analysis);
+            }
+            
+        }
+        catch(SQLException ex)
+        {
+            
+        }
+        return list;
+    }
 }

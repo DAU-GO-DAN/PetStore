@@ -73,4 +73,13 @@ public class Validator {
         return dateString;
     }
     
+    public LocalDate toDataDate(String dateString)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate date = LocalDate.parse(dateString, formatter);
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate formattedDate = LocalDate.parse(date.format(formatter));
+        return formattedDate;
+    }
+    
 }

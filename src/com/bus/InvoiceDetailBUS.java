@@ -4,10 +4,41 @@
  */
 package com.bus;
 
+import com.dao.InvoiceDetailDAO;
+import com.dao.InvoiceDetailDTO;
+import java.util.ArrayList;
+
 /**
  *
  * @author huynh
  */
 public class InvoiceDetailBUS {
+    public ArrayList<InvoiceDetailDTO> invDetailList;
+    static private InvoiceDetailDAO invData = new InvoiceDetailDAO();
+
+    public InvoiceDetailBUS() {
+        readData();
+    }
     
+    
+    
+    public void readData()
+    {
+        if(invDetailList == null)
+        {
+            invDetailList = new ArrayList<InvoiceDetailDTO>();
+        }
+        invDetailList = invData.readList();
+    }
+    
+    public void add(InvoiceDetailDTO inv)
+    {
+        invData.add(inv);
+        invDetailList.add(inv);
+    }
+    
+    public void advanceSearch()
+    {
+        
+    }
 }

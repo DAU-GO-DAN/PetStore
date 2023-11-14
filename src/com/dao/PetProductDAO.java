@@ -134,13 +134,13 @@ public class PetProductDAO {
                 product.setInStock(Integer.parseInt(rs.getString("inStock")));
                 product.setImageUrl(rs.getString("imageUrl"));
                 list.add(product);
-                System.out.println("id :"+rs.getString("petID"));
+//                System.out.println("id :"+rs.getString("petID"));
             }
         }
         catch(SQLException ex){
-            
+            ex.printStackTrace();
         }
-        System.out.println("list size :"+list.size());
+//        System.out.println("list size :"+list.size());
         return list;
         
     }

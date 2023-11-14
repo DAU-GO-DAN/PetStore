@@ -96,7 +96,7 @@ public class ProductCom extends javax.swing.JPanel {
 
         setImage();
         String price = valid.formatMoney(product.getSoldPrice());
-        lbSoldPrice.setText(""+price);
+        lbSoldPrice.setText(price+"đ");
         lbNameID.setText(""+product.getId()+ " "+product.getName());
     }// </editor-fold>//GEN-END:initComponents
 
@@ -139,6 +139,15 @@ public class ProductCom extends javax.swing.JPanel {
             ImageIcon newImageIcon = new ImageIcon(newImage);
             lbImage.setIcon(newImageIcon);
         }
+    }
+    
+    public void refreshInfo()
+    {
+        lbNameID.setText(""+product.getId()+ " "+product.getName());
+        String price = valid.formatMoney(product.getSoldPrice());
+        lbSoldPrice.setText(price+"đ");
+        setImage();
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -4,9 +4,13 @@
  */
 package com.gui;
 
+import com.bus.PetOnStoreBUS;
 import com.bus.PetProductBUS;
 import com.bus.PetProductTempBUS;
+import com.dao.PetOnStoreDTO;
 import com.dao.PetProductDTO;
+import com.dao.ProductDTO;
+import java.util.ArrayList;
 
 /**
  *
@@ -20,11 +24,39 @@ public class TestBug {
     public static void main(String[] args) {
         // TODO code application logic here
         PetProductBUS bus = new PetProductBUS();
-        System.out.println("size :"+bus.productList.size());
+        PetOnStoreBUS petBus = new PetOnStoreBUS();
+        ArrayList<ProductDTO> findList = new ArrayList<>();
+        System.out.println("pro size : "+bus.productList.size());
+        System.out.println("pet size : "+petBus.petList.size());
+//        for(PetProductDTO product : bus.productList)
+//        {
+//            System.out.println("id : "+product.getId());
+//        }
+        for(PetOnStoreDTO pet : petBus.petList)
+        {
+            ProductDTO productTemp = (ProductDTO) pet;
+            findList.add(productTemp);
+        }
+        
         for(PetProductDTO product : bus.productList)
         {
-            System.out.println("id : "+product.getId());
+            ProductDTO productTemp = (ProductDTO) product;
+            findList.add(productTemp);
         }
+        System.out.println("dto size : "+findList.size());
+        
+        for(ProductDTO productTemp : findList)
+        {
+            System.out.println("id: "+productTemp.getId());
+            System.out.println("name : "+productTemp.getName());
+            if(productTemp instanceof PetProductDTO)
+            {
+                PetProductDTO petProductTemp = (PetProductDTO) productTemp;
+                System.out.println("in stock: "+petProductTemp.getInStock());
+            }
+//            System.out.println("quantity : "+productTemp.get);
+        }
+        
     }
     
 }

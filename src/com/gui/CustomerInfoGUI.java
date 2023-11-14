@@ -18,11 +18,12 @@ public class CustomerInfoGUI extends javax.swing.JFrame {
     CustomerBUS cusBUS = new CustomerBUS();
     String flag = "";
     DateTimeFormatter newFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    Validator valid = new Validator();
     
     public CustomerInfoGUI (){
         initComponents();
         LocalDate creDate = LocalDate.now();
-        lCreatedDateInfo.setText(creDate.format(newFormat));
+        lCreatedDateInfo.setText(valid.toUIDate(creDate));
         lIDInfo.setText(cusBUS.generateCustomerID());
         setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -33,13 +34,25 @@ public class CustomerInfoGUI extends javax.swing.JFrame {
         this.flag = flag;
         this.ui = ui;
         initComponents();
-        String formattedDate = cus.getCreatedDate().format(newFormat);
+        
         lIDInfo.setText(cus.getCusID());
         tfCusName.setText(cus.getCusName());
         tfPhone.setText(cus.getPhone());
         tfAddress.setText(cus.getAddress());
-        lCreatedDateInfo.setText(formattedDate);
+        lCreatedDateInfo.setText(valid.toUIDate(cus.getCreatedDate()));
         setResizable(false);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    AddInvoice addUI;
+    String action = "";
+    public CustomerInfoGUI(AddInvoice addUI)
+    {
+        action = "add";
+        this.addUI = addUI;
+        initComponents();
+        LocalDate creDate = LocalDate.now();
+        lCreatedDateInfo.setText(valid.toUIDate(creDate));
+        lIDInfo.setText(cusBUS.generateCustomerID());
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
@@ -236,19 +249,27 @@ public class CustomerInfoGUI extends javax.swing.JFrame {
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         // TODO add your handling code here:
         
-        LocalDate formattedDate = LocalDate.parse(lCreatedDateInfo.getText(), newFormat);
+        LocalDate formattedDate = valid.toDataDate(lCreatedDateInfo.getText());
         CustomerDTO cus = new CustomerDTO();
         cus.setCusID(lIDInfo.getText());
         cus.setCusName(cusBUS.normalization(tfCusName.getText()));
         cus.setPhone(cusBUS.normalization(tfPhone.getText()));
         cus.setAddress(cusBUS.normalization(tfAddress.getText()));
         cus.setCreatedDate(formattedDate);
-        if(this.flag.equalsIgnoreCase("edit")){
-            cusBUS.edit(cus, lIDInfo.getText());
-        }else{
+        
+        if(action.equalsIgnoreCase("add"))
+        {
             cusBUS.add(cus);
+            addUI.setCustomerInfo(cus);
         }
-        ui.reloadData();
+        else{
+            if(this.flag.equalsIgnoreCase("edit")){
+                cusBUS.edit(cus, lIDInfo.getText());
+            }else{
+                cusBUS.add(cus);
+            }
+            ui.reloadData();
+        }
         this.dispose();
     }//GEN-LAST:event_btnConfirmActionPerformed
 

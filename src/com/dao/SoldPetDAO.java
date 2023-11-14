@@ -33,7 +33,7 @@ public class SoldPetDAO {
     public void add(SoldPetDTO pet)
     {
         try{
-            String qry = "insert into SoldPet value ("
+            String qry = "insert into SoldPet values ("
                     + "'" + pet.getId() + "'" 
                     + ", "+ "N'" + pet.getName() + "'" 
                     + ", "+ "" + pet.getSoldPrice() + "" 
@@ -58,7 +58,7 @@ public class SoldPetDAO {
         }
         catch(SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
     }
     
@@ -123,6 +123,7 @@ public class SoldPetDAO {
                 pet.setColor(rs.getString("color"));
                 pet.setCustomerID(rs.getString("cusID"));
                 pet.setDate(rs.getDate("soldDate").toLocalDate());
+                pet.setImageUrl(rs.getString("imageUrl"));
                 SoldPetList.add(pet);
             }
         }

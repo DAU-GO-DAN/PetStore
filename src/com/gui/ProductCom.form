@@ -77,7 +77,7 @@
         <Property name="horizontalAlignment" type="int" value="0"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="String price = valid.formatMoney(product.getSoldPrice());&#xa;lbSoldPrice.setText(&quot;&quot;+price);"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="String price = valid.formatMoney(product.getSoldPrice());&#xa;lbSoldPrice.setText(price+&quot;&#x111;&quot;);"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="lbNameID">

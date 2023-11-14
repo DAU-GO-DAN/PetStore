@@ -27,6 +27,12 @@ public class InvoiceBUS {
         invList = invDAO.readData();
         
     }
+    
+    public void add(InvoiceDTO inv)
+    {
+        invList.add(inv);
+        invDAO.add(inv);
+    }
    
     public DefaultTableModel getModel(){
      
@@ -80,5 +86,43 @@ public class InvoiceBUS {
        Id.addRow(row);
    }
          return Id;
+    }
+    
+    public String generateID()
+    {
+        String id = "";
+        
+        if(invList.isEmpty())
+        {
+            id = "HD001";
+        }
+        else{
+            int number = 1;
+            String prefix = "HD";
+            String flag = "";
+            for(InvoiceDTO inv : invList)
+            {
+                String numString = String.format("%03d", number);
+                id = prefix + numString;
+                if(inv.getInvoiceID().equalsIgnoreCase(id))
+                {
+                    flag = "noslot";
+                    number++;
+                }
+                else{
+                    flag = "generated";
+                    break;
+                }
+            }
+            
+            if(flag.equalsIgnoreCase("noslot"))
+            {
+                String numString = String.format("%03d", number);
+                id = prefix + numString;
+            }
+            
+            
+        }
+        return id;
     }
 }

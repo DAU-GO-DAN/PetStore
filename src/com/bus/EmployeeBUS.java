@@ -29,7 +29,7 @@ public class EmployeeBUS {
     EmployeeDAO empDAO = new EmployeeDAO();
     static ArrayList<EmployeeDTO> empList = new ArrayList<EmployeeDTO>();
     public EmployeeBUS() {
-       
+       readData();
     }
     public void readData(){
         empList = empDAO.readData();
@@ -228,6 +228,19 @@ public class EmployeeBUS {
     }
     public boolean containsOnlyLetters(String input) {
         return input.matches("^[a-zA-Z\\p{L} ]*$");
+    }
+    
+    public String getName(String ID)
+    {
+        String name = "";
+        for(EmployeeDTO emp : empList)
+        {
+            if(emp.getId().equalsIgnoreCase(ID))
+            {
+                name = emp.getName();
+            }
+        }
+        return name;
     }
     
     

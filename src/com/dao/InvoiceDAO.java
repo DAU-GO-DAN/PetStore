@@ -33,6 +33,31 @@ public class InvoiceDAO {
         conn = MyConnection.getConnection();
     }
     
+    public void add(InvoiceDTO inv)
+    {
+        try{
+            String qry = "insert into Invoice values ("
+                    + "'" +inv.getInvoiceID() + "', "
+                    + "'" +inv.getCreatedDate()+ "', "
+                    + "" +inv.getTotalAmount()+ ", "
+                    + "'" +inv.getEmployeeID() + "', "
+                    + "'" +inv.getCustomerID() + "' "
+                    + " )";
+            stmt = conn.createStatement();
+            int rowAffected = stmt.executeUpdate(qry);
+            if(rowAffected == 1){
+                JOptionPane.showMessageDialog(null, "Thêm thành công");
+            }else{
+                JOptionPane.showMessageDialog(null, "Thêm không thành công");
+            }
+        }
+        catch(SQLException ex)
+        {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Thêm không thành công");
+        }
+    }
+    
     public ArrayList readData(){
          ArrayList<InvoiceDTO> InvList= new ArrayList<>();
          try {

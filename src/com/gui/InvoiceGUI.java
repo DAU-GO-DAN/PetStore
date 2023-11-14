@@ -21,22 +21,26 @@ public class InvoiceGUI extends javax.swing.JPanel {
      * Creates new form InvoiceGUI
      */
     InvoiceBUS InvBUS= new InvoiceBUS();
-    public InvoiceGUI() {
+    String empID; 
+    String empName;
+    public InvoiceGUI(String empID, String empName) {
+        this.empID = empID;
+        this.empName = empName;
         initComponents();
         Search.setSVGImage("com/image/search.svg", 50, 50);
         Add.setSVGImage("com/image/add.svg", 50, 50);
         Reset.setSVGImage("com/image/reload.svg", 50, 50);
     }
     
-   public static void main(String[] args) {
-        JFrame f = new JFrame();
-        InvoiceGUI x = new InvoiceGUI();
-        f.add(x);
-        f.setSize(1280,620);
-        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        f.setVisible(true);
-    
-    }
+//   public static void main(String[] args) {
+//        JFrame f = new JFrame();
+//        InvoiceGUI x = new InvoiceGUI();
+//        f.add(x);
+//        f.setSize(1280,620);
+//        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//        f.setVisible(true);
+//    
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -109,6 +113,12 @@ public class InvoiceGUI extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        Add.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                AddMouseClicked(evt);
+            }
+        });
 
         Reset.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -193,11 +203,11 @@ public static boolean containsSubstring(String mainString, String subString) {
 
     private void SearchTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchTxtActionPerformed
         // TODO add your handling code here:
-          String input=SearchTxt.getText();
-   if (KeyEvent.VK_ENTER == evt.getKeyCode()){
-         Table.setModel(InvBUS.getModelId(SearchTxt.getText()));
-   }
-        
+//        String input=SearchTxt.getText();
+//        if (KeyEvent.VK_ENTER == evt.getKeyCode()){
+//              Table.setModel(InvBUS.getModelId(SearchTxt.getText()));
+//        }
+//        
     }//GEN-LAST:event_SearchTxtActionPerformed
 
     private void ResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetMouseClicked
@@ -205,6 +215,12 @@ public static boolean containsSubstring(String mainString, String subString) {
         InvBUS.readData();
         Table.setModel(InvBUS.getModel());
     }//GEN-LAST:event_ResetMouseClicked
+
+    private void AddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddMouseClicked
+        // TODO add your handling code here:
+        AddInvoice add = new AddInvoice(empID, empName);
+        add.setVisible(true);
+    }//GEN-LAST:event_AddMouseClicked
 
     
 

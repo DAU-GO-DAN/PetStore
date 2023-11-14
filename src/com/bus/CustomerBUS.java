@@ -7,6 +7,7 @@ package com.bus;
 import com.dao.CustomerDAO;
 import com.dao.CustomerDTO;
 import com.gui.CustomerGUI;
+import com.gui.Validator;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -16,10 +17,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author huynh
  */
+
 public class CustomerBUS {
 
     CustomerDAO cusDAO = new CustomerDAO();
-    ArrayList<CustomerDTO> cusList = new ArrayList<>();
+    public ArrayList<CustomerDTO> cusList = new ArrayList<>();
+    Validator valid = new Validator();
     
     public CustomerBUS() {
         readData();
@@ -53,6 +56,21 @@ public class CustomerBUS {
             if(cus.getPhone().startsWith(phone)) return cus;
         }
         return null;
+    }
+    
+    public ArrayList<CustomerDTO> searchCus(String text)
+    {
+        ArrayList<CustomerDTO> matchingList = new ArrayList<>();
+        for(CustomerDTO cus : cusList)
+        {
+            if(cus.getPhone().contains(text) ||
+                    valid.normalizeString(cus.getCusName()).toLowerCase().contains(valid.normalizeString(text).toLowerCase()) ||
+                    cus.getCusID().equalsIgnoreCase(text))
+            {
+                matchingList.add(cus);
+            }
+        }
+        return matchingList;
     }
     
     public void readData(){
@@ -170,4 +188,13 @@ public class CustomerBUS {
         }
         return name;
     }
+    
+//    public String getID(String name)
+//    {
+//        String ID = "";
+//        for(CustomerDTO customer : cusList)
+//        {
+//            if()
+//        }
+//    }
 }

@@ -5,6 +5,7 @@
 package com.gui;
 
 import com.bus.CustomerBUS;
+import com.bus.EmployeeBUS;
 import com.dao.AccountDTO;
 import static java.awt.Color.black;
 import static java.awt.Color.red;
@@ -27,10 +28,14 @@ public class HomeGUI extends javax.swing.JFrame {
     /**
      * Creates new form HomeGUI
      */
-    
+    String empID = "";
+    String empName = "";
     public HomeGUI(AccountDTO acc) {
         initComponents();
         lAccInfo.setText(acc.getUsername());
+        empID = acc.getUserId();
+        EmployeeBUS empBus = new EmployeeBUS();
+        empName = empBus.getName(empID);
         roleDivision(acc);
         colorChangeTitle();
         svgLogo.setSVGImage("com/image/logohinh.svg", 80, 80);
@@ -265,7 +270,8 @@ public class HomeGUI extends javax.swing.JFrame {
         mainPanel.removeAll();
         mainPanel.revalidate();
         mainPanel.repaint();
-        InvoiceGUI invoicePanel = new InvoiceGUI();
+        
+        InvoiceGUI invoicePanel = new InvoiceGUI(empID, empName);
         mainPanel.setLayout(new GridLayout(1,1));
         mainPanel.add(invoicePanel);
     }//GEN-LAST:event_linvoiceMouseClicked
