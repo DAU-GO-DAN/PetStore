@@ -7,10 +7,13 @@ package com.gui;
 import com.bus.BreedBUS;
 import com.bus.PetOnStoreBUS;
 import com.bus.PetProductBUS;
+import com.bus.PetProductTypeBUS;
 import com.bus.SoldPetBUS;
 import com.bus.SupplierBUS;
+import com.dao.BreedDTO;
 import com.dao.PetOnStoreDTO;
 import com.dao.PetProductDTO;
+import com.dao.PetProductTypeDTO;
 import com.dao.ProductDTO;
 import com.dao.SoldPetDTO;
 import com.dao.SupplierDTO;
@@ -43,14 +46,35 @@ public class ProductUI extends javax.swing.JPanel {
      * Creates new form ProductCom
      */
     PetOnStoreBUS POSBus = new PetOnStoreBUS();
+    ArrayList<PetOnStoreDTO> petOnStoreList = new ArrayList<>();
+    
     PetProductBUS PetProBus = new PetProductBUS();
+    ArrayList<PetProductDTO> proList = new ArrayList<>();
+    
     SoldPetBUS soldBus = new SoldPetBUS();
+    ArrayList<SoldPetDTO> soldList = new ArrayList<>();
+    
+    
+    
+    BreedBUS breed = new BreedBUS();
+    PetProductTypeBUS typeBus = new PetProductTypeBUS();
     int hgap = 5;
     int vgap = 5;
+    String section = "";
+    String searchOption = "";
     public ProductUI() {
         initComponents();
         setSize(new Dimension(1280, 620));
 //        svgAdd.setSVGImage("com/image/add.svg", 32, 32);
+        Table.removeAll();
+        Table.revalidate();
+        Table.repaint();
+        refreshTable();
+//        svgAdd.setIcon(null);
+        svgAdd.setSVGImage("com/image/add.svg", 32, 32);
+        section = "petonstore";
+        loadFilter();
+        lbPetOnStore.setBackground(new Color(0xA7D2CB));
     }
 
     /**
@@ -72,10 +96,10 @@ public class ProductUI extends javax.swing.JPanel {
         Table = new javax.swing.JPanel();
         svgAdd = new com.gui.SvgImage();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton3 = new javax.swing.JButton();
+        cbbFilter = new javax.swing.JComboBox<>();
+        btnFilter = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(0, 204, 204));
+        setBackground(new java.awt.Color(167, 210, 203));
         setName(""); // NOI18N
 
         NavBar.setBackground(new java.awt.Color(255, 255, 255));
@@ -145,15 +169,25 @@ public class ProductUI extends javax.swing.JPanel {
                     {
                         navBtn.setBackground(new Color(0xFFFFFF));
                     }
-                    navButton.setBackground(new Color(0xF0D2BB));
+                    navButton.setBackground(new Color(0xA7D2CB));
                 }
 
             });
         }
 
         tfSearch.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tfSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfSearchKeyPressed(evt);
+            }
+        });
 
-        BaseTable.setBackground(new java.awt.Color(204, 255, 204));
+        BaseTable.setBackground(new java.awt.Color(167, 210, 203));
+
+        scrollPane.setBackground(new java.awt.Color(167, 210, 203));
+        scrollPane.setBorder(null);
+
+        Table.setBackground(new java.awt.Color(167, 210, 203));
 
         javax.swing.GroupLayout TableLayout = new javax.swing.GroupLayout(Table);
         Table.setLayout(TableLayout);
@@ -191,11 +225,26 @@ public class ProductUI extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel1.setText("Bộ lọc : ");
 
-        jComboBox1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbbFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cbbFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbbFilter.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbbFilterItemStateChanged(evt);
+            }
+        });
+        cbbFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbFilterActionPerformed(evt);
+            }
+        });
 
-        jButton3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jButton3.setText("Lọc");
+        btnFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnFilter.setText("Lọc");
+        btnFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -213,12 +262,12 @@ public class ProductUI extends javax.swing.JPanel {
                         .addGap(36, 36, 36)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbbFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)
+                        .addComponent(btnFilter)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(svgAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 11, Short.MAX_VALUE))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,11 +283,11 @@ public class ProductUI extends javax.swing.JPanel {
                             .addGap(11, 11, 11)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton3)))
+                        .addComponent(cbbFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnFilter)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(BaseTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         BaseTable.setPreferredSize(new Dimension(1080, 550));
@@ -248,9 +297,16 @@ public class ProductUI extends javax.swing.JPanel {
         // TODO add your handling code here:
 //        AddPetForm addForm = new AddPetForm(this);
 //        addForm.setVisible(true);
-
-        AddProductForm addForm = new AddProductForm();
-        addForm.setVisible(true);
+        if(section.equals("petonstore"))
+        {
+            AddPetForm addForm = new AddPetForm(this);
+            addForm.setVisible(true);
+        }
+        else if(section.equals("petproduct")){
+            AddProductForm addForm = new AddProductForm(this);
+            addForm.setVisible(true);
+        }
+        
     }//GEN-LAST:event_svgAddMouseClicked
 
     private void lbPetOnStoreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbPetOnStoreMouseClicked
@@ -259,7 +315,10 @@ public class ProductUI extends javax.swing.JPanel {
         Table.revalidate();
         Table.repaint();
         refreshTable();
-        svgAdd.setIcon(null);
+//        svgAdd.setIcon(null);
+        svgAdd.setSVGImage("com/image/add.svg", 32, 32);
+        section = "petonstore";
+        loadFilter();
     }//GEN-LAST:event_lbPetOnStoreMouseClicked
 
     private void lbPetProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbPetProductMouseClicked
@@ -267,13 +326,43 @@ public class ProductUI extends javax.swing.JPanel {
         
         refreshPetProList();
         svgAdd.setSVGImage("com/image/add.svg", 32, 32);
+        section = "petproduct";
+        loadFilter();
     }//GEN-LAST:event_lbPetProductMouseClicked
 
     private void lbSoldPetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbSoldPetMouseClicked
         // TODO add your handling code here:
         soldPetTable();
         svgAdd.setIcon(null);
+        section = "soldpet";
+        loadFilter();
     }//GEN-LAST:event_lbSoldPetMouseClicked
+
+    private void cbbFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbFilterActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_cbbFilterActionPerformed
+
+    private void cbbFilterItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbbFilterItemStateChanged
+        // TODO add your handling code here:
+//        if(!section.equals(""))
+//        {
+//            System.out.println(""+cbbFilter.getSelectedItem().toString());
+//        }
+    }//GEN-LAST:event_cbbFilterItemStateChanged
+
+    private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
+        // TODO add your handling code here:
+        if(!section.equals(""))
+        {
+            
+        }
+    }//GEN-LAST:event_btnFilterActionPerformed
+
+    private void tfSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyPressed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_tfSearchKeyPressed
 
     public void revalidateTable()
     {
@@ -286,39 +375,39 @@ public class ProductUI extends javax.swing.JPanel {
     {
         revalidateTable();
         
-        ArrayList<PetOnStoreDTO> testList = new ArrayList<>();
-        POSBus.readData();
-        testList = POSBus.petList;
         
-        if(testList.size() <= 6)
+        POSBus.readData();
+        petOnStoreList = POSBus.petList;
+        
+        if(petOnStoreList.size() <= 6)
         {
            Table.setLayout(new GridLayout(2, 3, hgap, vgap));
-            for(PetOnStoreDTO pet : testList)
+            for(PetOnStoreDTO pet : petOnStoreList)
             {
                 ProductCom product = new ProductCom(pet, this);
                 Table.add(product);
             }
-            int remains = 6 - testList.size();
+            int remains = 6 - petOnStoreList.size();
             for(int i = 0; i < remains; i++)
             {
                 EmptyProduct emp = new EmptyProduct();
                 Table.add(emp);
             }
         }
-        else if(testList.size() > 6)
+        else if(petOnStoreList.size() > 6)
         {
             int rows = 0;
-            int remains = testList.size() % 3;
+            int remains = petOnStoreList.size() % 3;
             if(remains != 0)
             {
-                rows = (testList.size() / 3) + 1;
+                rows = (petOnStoreList.size() / 3) + 1;
             }
             else{
-                rows = (testList.size() / 3);
+                rows = (petOnStoreList.size() / 3);
             }
             Table.setLayout(new GridLayout(rows, 3, hgap, vgap));
             
-            for(PetOnStoreDTO pet : testList)
+            for(PetOnStoreDTO pet : petOnStoreList)
             {
                 ProductCom product = new ProductCom(pet, this);
                 Table.add(product);
@@ -335,42 +424,42 @@ public class ProductUI extends javax.swing.JPanel {
         Table.revalidate();
         Table.repaint();
         
-        ArrayList<PetProductDTO> testList = new ArrayList<>();
+        
         PetProBus.readData();
-        testList = PetProBus.productList;
+        proList = PetProBus.productList;
         
 //        System.out.println("int 1:"+testList.size());
 //        System.out.println("int 2: "+PetProBus.productList.size());
         
-        if(testList.size() <= 6)
+        if(proList.size() <= 6)
         {
             Table.setLayout(new GridLayout(2, 3, hgap, vgap));
-            for(PetProductDTO product : testList)
+            for(PetProductDTO product : proList)
             {
                 ProductCom productCom = new ProductCom(product, this);
                 Table.add(productCom);
             }
-            int remains = 6 - testList.size();
+            int remains = 6 - proList.size();
             for(int i = 0; i < remains; i++)
             {
                 EmptyProduct emp = new EmptyProduct();
                 Table.add(emp);
             }
         }
-        else if(testList.size() > 6)
+        else if(proList.size() > 6)
         {
             int rows = 0;
-            int remains = testList.size() % 3;
+            int remains = proList.size() % 3;
             if(remains != 0)
             {
-                rows = (testList.size() / 3) + 1;
+                rows = (proList.size() / 3) + 1;
             }
             else{
-                rows = (testList.size() / 3);
+                rows = (proList.size() / 3);
             }
             Table.setLayout(new GridLayout(rows, 3, hgap, vgap));
             
-            for(PetProductDTO product : testList)
+            for(PetProductDTO product : proList)
             {
                 ProductCom productCom = new ProductCom(product, this);
                 Table.add(productCom);
@@ -386,39 +475,39 @@ public class ProductUI extends javax.swing.JPanel {
         Table.revalidate();
         Table.repaint();
         
-        ArrayList<SoldPetDTO> testList = new ArrayList<>();
-        soldBus.readData();
-        testList = soldBus.soldList;
         
-        if(testList.size() <= 6)
+        soldBus.readData();
+        soldList = soldBus.soldList;
+        
+        if(soldList.size() <= 6)
         {
             Table.setLayout(new GridLayout(2, 3, hgap, vgap));
-            for(SoldPetDTO product : testList)
+            for(SoldPetDTO product : soldList)
             {
                 ProductCom productCom = new ProductCom(product, this);
                 Table.add(productCom);
             }
-            int remains = 6 - testList.size();
+            int remains = 6 - soldList.size();
             for(int i = 0; i < remains; i++)
             {
                 EmptyProduct emp = new EmptyProduct();
                 Table.add(emp);
             }
         }
-        else if(testList.size() > 6)
+        else if(soldList.size() > 6)
         {
             int rows = 0;
-            int remains = testList.size() % 3;
+            int remains = soldList.size() % 3;
             if(remains != 0)
             {
-                rows = (testList.size() / 3) + 1;
+                rows = (soldList.size() / 3) + 1;
             }
             else{
-                rows = (testList.size() / 3);
+                rows = (soldList.size() / 3);
             }
             Table.setLayout(new GridLayout(rows, 3, hgap, vgap));
             
-            for(SoldPetDTO product : testList)
+            for(SoldPetDTO product : soldList)
             {
                 ProductCom productCom = new ProductCom(product, this);
                 Table.add(productCom);
@@ -426,6 +515,25 @@ public class ProductUI extends javax.swing.JPanel {
         }
         Table.revalidate();
         Table.repaint();
+    }
+    
+    public void loadFilter()
+    {
+        cbbFilter.removeAllItems();
+        if(section.equals("petonstore") || section.equals("soldpet"))
+        {
+            for(BreedDTO bre : breed.breedList)
+            {
+                cbbFilter.addItem(bre.getName());
+            }
+        }
+        else if(section.equals("petproduct"))
+        {
+            for(PetProductTypeDTO type : typeBus.typeList)
+            {
+                cbbFilter.addItem(type.getName());
+            }
+        }
     }
     
     
@@ -445,8 +553,8 @@ public class ProductUI extends javax.swing.JPanel {
     private javax.swing.JPanel BaseTable;
     private javax.swing.JPanel NavBar;
     private javax.swing.JPanel Table;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton btnFilter;
+    private javax.swing.JComboBox<String> cbbFilter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lbPetOnStore;
     private javax.swing.JLabel lbPetProduct;

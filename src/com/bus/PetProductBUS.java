@@ -78,6 +78,19 @@ public class PetProductBUS {
         return matchingList;
     }
     
+    public String getName(String ID)
+    {
+        String name = "";
+        for(PetProductDTO product : productList)
+        {
+            if(product.getId().equalsIgnoreCase(ID))
+            {
+                name = product.getName();
+            }
+        }
+        return name;
+    }
+    
     public String generateID()
     {
         String ID = "";

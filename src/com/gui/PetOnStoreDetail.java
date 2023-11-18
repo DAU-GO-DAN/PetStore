@@ -32,15 +32,17 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
     private File selectedFile;
     private String imagePath;
     ProductUI ui;
+    ProductCom com;
     PetOnStoreDTO pet;
     BreedBUS breed = new BreedBUS();
     SupplierTempBUS supplier = new SupplierTempBUS();
     PetOnStoreBUS petBus = new PetOnStoreBUS();
     Validator valid = new Validator();
     private String supName;
-    public PetOnStoreDetail(PetOnStoreDTO pet, ProductUI ui) {
+    public PetOnStoreDetail(PetOnStoreDTO pet, ProductUI ui, ProductCom com) {
         this.pet = pet;
         this.ui = ui;
+        this.com = com;
         this.imageUrl = pet.getImageUrl();
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -84,6 +86,8 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
         inputSoldPrice = new javax.swing.JButton();
         tfName = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        tfImportDate = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -94,6 +98,7 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("Giá Nhập");
 
+        tfImportPrice.setEditable(false);
         tfImportPrice.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfImportPrice.setText("1.000.000.000");
 
@@ -115,6 +120,7 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel7.setText("Giống loài");
 
+        tfBreed.setEditable(false);
         tfBreed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfBreed.setText("Chó Shiba Nhựt Bổn");
 
@@ -207,6 +213,13 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel12.setText("Tên");
 
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel13.setText("Ngày nhập ");
+
+        tfImportDate.setEditable(false);
+        tfImportDate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tfImportDate.setText("11/20");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -234,8 +247,10 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
                             .addComponent(inputImPrice))
                         .addComponent(tfImportPrice, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfName, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 320, Short.MAX_VALUE)
+                    .addComponent(tfName, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfImportDate, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfColor, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -326,7 +341,11 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfImportDate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -349,6 +368,7 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
         supName = supplier.getName(pet.getSupplierId());
         cbbSupplier.setSelectedItem(supName+"");
         tfName.setText(pet.getName()+"");
+        setImportDate();
 
         pack();
         setLocationRelativeTo(null);
@@ -428,7 +448,9 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
         
         petBus.edit(pet);
         loadInfo();
-        ui.refreshTable();
+//        ui.refreshTable();
+        com.refreshInfo();
+        
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnChooseBreedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseBreedActionPerformed
@@ -531,6 +553,12 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
         }
     }
     
+    public void setImportDate()
+    {
+        tfImportDate.setText(valid.toUIDate(pet.getImportDate()));
+        
+    }
+    
     public void setImage()
     {
         int labelWidth = 345;
@@ -598,6 +626,7 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -611,6 +640,7 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
     private javax.swing.JTextField tfBreed;
     private javax.swing.JTextField tfColor;
     private javax.swing.JTextArea tfDescription;
+    private javax.swing.JTextField tfImportDate;
     private javax.swing.JTextField tfImportPrice;
     private javax.swing.JTextField tfName;
     private javax.swing.JTextField tfSoldPrice;

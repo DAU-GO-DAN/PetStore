@@ -16,24 +16,25 @@ import java.util.ArrayList;
  *
  * @author DUC PHU
  */
-public class AddInvoiceItemUI extends javax.swing.JFrame {
+public class AddImportItemUI extends javax.swing.JFrame {
 
     /**
-     * Creates new form AddInvoiceItemUI
+     * Creates new form AddImportItemUI
      */
     CreateImportUI addUI;
     ArrayList<ProductDTO> findList = new ArrayList<>();
     ArrayList<ProductDTO> productList = new ArrayList<>();
     
     ArrayList<ProductDTO> addedList;
-    ArrayList<AddedInvoiceItem> addedPanelItemList;
-    
+    ArrayList<AddedImportItem> addedPanelItemList;
+   
     
     Validator valid = new Validator();
-    public AddInvoiceItemUI(CreateImportUI addUI, ArrayList<ProductDTO> addedList, ArrayList<AddedInvoiceItem> addedPanelItemList) {
+    public AddImportItemUI(CreateImportUI addUI, ArrayList<ProductDTO> addedList, ArrayList<AddedImportItem> addedPanelItemList) {
         this.addUI = addUI;
         this.addedList = addedList;
         this.addedPanelItemList = addedPanelItemList;
+//        this.supID = supID;
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -80,7 +81,7 @@ public class AddInvoiceItemUI extends javax.swing.JFrame {
         jLabel5.setText("Tên");
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel6.setText("Giá");
+        jLabel6.setText("Giá nhập");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -183,6 +184,7 @@ public class AddInvoiceItemUI extends javax.swing.JFrame {
         initProductList();
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tfSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyPressed
@@ -206,11 +208,11 @@ public class AddInvoiceItemUI extends javax.swing.JFrame {
             FindTable.setLayout(new GridLayout(findList.size(), 1));
         }
         
-//        for(ProductDTO productTemp : findList)
-//        {
-//            FindInvoiceItem item = new FindInvoiceItem(productTemp, addUI, addedList, addedPanelItemList);
-//            FindTable.add(item);
-//        }
+        for(ProductDTO productTemp : findList)
+        {
+            FindImportItem item = new FindImportItem(productTemp, addUI, addedList, addedPanelItemList, this);
+            FindTable.add(item);
+        }
     }
     
     public ArrayList<ProductDTO> setFindTableList()
@@ -220,8 +222,8 @@ public class AddInvoiceItemUI extends javax.swing.JFrame {
         searchText = valid.normalizeString(tfSearch.getText()).toLowerCase();
         for(ProductDTO product : productList)
         {
-            if(product.getId().toLowerCase().contains(searchText) || 
-                    valid.normalizeString(product.getName()).toLowerCase().contains(searchText))
+            if( (product.getId().toLowerCase().contains(searchText) || 
+                    valid.normalizeString(product.getName()).toLowerCase().contains(searchText)))
             {
                 matchingFindList.add(product);
             }
@@ -231,14 +233,8 @@ public class AddInvoiceItemUI extends javax.swing.JFrame {
     
     public void initProductList()
     {
-        PetOnStoreBUS petBus = new PetOnStoreBUS();
-        PetProductBUS productBus = new PetProductBUS();
-        for(PetOnStoreDTO pet : petBus.petList)
-        {
-            ProductDTO productTemp = (ProductDTO) pet;
-            productList.add(productTemp);
-        }
         
+        PetProductBUS productBus = new PetProductBUS();
         for(PetProductDTO product : productBus.productList)
         {
             ProductDTO productTemp = (ProductDTO) product;
@@ -263,20 +259,20 @@ public class AddInvoiceItemUI extends javax.swing.JFrame {
 //                }
 //            }
 //        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(AddInvoiceItemUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(AddImportItemUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(AddInvoiceItemUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(AddImportItemUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(AddInvoiceItemUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(AddImportItemUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(AddInvoiceItemUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            java.util.logging.Logger.getLogger(AddImportItemUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
 //
 //        /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
 //            public void run() {
-//                new AddInvoiceItemUI().setVisible(true);
+//                new AddImportItemUI().setVisible(true);
 //            }
 //        });
 //    }

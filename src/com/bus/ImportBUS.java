@@ -13,8 +13,8 @@ import javax.swing.JOptionPane;
  *
  * @author huynh
  */
-public class ImportBUS {
-  ImportDAO impDAO = new ImportDAO();
+public class ImportBUS {  
+    ImportDAO impDAO = new ImportDAO();
     public <impDAO> ArrayList<ImportDTO> getList() throws SQLException{
         return impDAO.readImpList();
     }
@@ -40,5 +40,41 @@ public class ImportBUS {
         }      
     }
     
-    
+    public String generateID() throws SQLException
+    {
+        String ID = "";
+        String prefix = "PN";
+        String flag = "";
+        if(getList().isEmpty())
+        {
+            ID = "PN001";
+        }
+        else{
+            int i = 1;
+            for(ImportDTO impTemp : getList())
+            {
+                String number = String.format("%03d", i);
+
+                ID = prefix + number;
+                if(impTemp.getImportID().equalsIgnoreCase(ID))
+                {
+                    flag = "noslot";
+                    i++;
+                }
+                else{
+                    flag = "generated";
+                    break;
+                }
+            }
+        
+            if(flag.equals("noslot"))
+            {
+
+                String number = String.format("%03d", i);
+                ID = prefix + number;
+            }
+        }
+        
+        return ID;
+    }
 }

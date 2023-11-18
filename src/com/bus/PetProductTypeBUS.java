@@ -68,7 +68,7 @@ public class PetProductTypeBUS {
         String ID = "";
         for(PetProductTypeDTO type : typeList)
         {
-            if(valid.normalizeString(type.getName().toLowerCase()).equalsIgnoreCase(valid.normalizeString(name).toLowerCase()))
+            if(valid.normalizeString(type.getName()).toLowerCase().equalsIgnoreCase(valid.normalizeString(name).toLowerCase()))
             {
                 ID = type.getCategoryId();
             }

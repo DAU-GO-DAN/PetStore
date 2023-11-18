@@ -21,12 +21,14 @@ public class ProductCom extends javax.swing.JPanel {
     /**
      * Creates new form ProductCom
      */
+    int imageWidth = 0;
     ProductUI ui;
     ProductDTO product;
     Validator valid = new Validator();
     public ProductCom(ProductDTO product, ProductUI ui) {
         this.product = product;
         this.ui = ui;
+        this.imageWidth = this.getWidth();
         initComponents();
         setSize(new Dimension(345, 265));
         svgEdit.setSVGImage("com/image/edit.svg", 48, 48);
@@ -48,7 +50,7 @@ public class ProductCom extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        lbImage.setBackground(new java.awt.Color(204, 204, 255));
+        lbImage.setBackground(new java.awt.Color(167, 210, 203));
         lbImage.setOpaque(true);
 
         lbSoldPrice.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -97,6 +99,7 @@ public class ProductCom extends javax.swing.JPanel {
         setImage();
         String price = valid.formatMoney(product.getSoldPrice());
         lbSoldPrice.setText(price+"đ");
+        setInStock();
         lbNameID.setText(""+product.getId()+ " "+product.getName());
     }// </editor-fold>//GEN-END:initComponents
 
@@ -105,13 +108,13 @@ public class ProductCom extends javax.swing.JPanel {
         if(product instanceof PetOnStoreDTO)
         {
             PetOnStoreDTO petTemp = (PetOnStoreDTO) product;
-            PetOnStoreDetail detailForm = new PetOnStoreDetail(petTemp, ui);
+            PetOnStoreDetail detailForm = new PetOnStoreDetail(petTemp, ui, this);
             detailForm.setVisible(true);
         }
         else if(product instanceof PetProductDTO)
         {
             PetProductDTO productTemp = (PetProductDTO) product;
-            PetProductDetail detailForm = new PetProductDetail(productTemp);
+            PetProductDetail detailForm = new PetProductDetail(productTemp, this);
             detailForm.setVisible(true);
         }
         else if(product instanceof SoldPetDTO)
@@ -123,6 +126,15 @@ public class ProductCom extends javax.swing.JPanel {
         
     }//GEN-LAST:event_svgEditMouseClicked
 
+    public void setInStock()
+    {
+        if(product instanceof PetProductDTO)
+        {
+            PetProductDTO productTemp = (PetProductDTO) product;
+            lbSoldPrice.setText(valid.formatMoney(productTemp.getSoldPrice())+"đ - SL : "+productTemp.getInStock());
+        }
+    }
+    
     public void setImage()
     {
         if(product.getImageUrl().equals("null"))
@@ -130,7 +142,7 @@ public class ProductCom extends javax.swing.JPanel {
             
         }
         else{
-            int labelWidth = 345;
+            int labelWidth = 347;
             int labelHeight = 176;
             String imageUrl = product.getImageUrl();
             ImageIcon imageIcon = new ImageIcon("src/com/image/" + imageUrl);

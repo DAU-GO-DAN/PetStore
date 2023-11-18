@@ -5,28 +5,33 @@
 package com.gui;
 
 import com.bus.AccountBUS;
+import java.awt.Color;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
  * @author MSI
  */
 public class AccountGUI extends javax.swing.JPanel {
-
+    
     /**
      * Creates new form AccountGUI
      */
     AccountBUS accBUS = new AccountBUS();
     public AccountGUI() {
         initComponents();
-        svgSearch.setSVGImage("com/image/search.svg", 40, 40);
-        svgAdd.setSVGImage("com/image/add.svg", 40, 40);
-        svgTrash.setSVGImage("com/image/trash.svg", 40, 40);
+        svgSearch.setSVGImage("com/image/search.svg", 30, 30);
+        svgAdd.setSVGImage("com/image/add.svg", 30, 30);
+        svgTrash.setSVGImage("com/image/trash.svg", 30, 30);
         svgTrash.setVisible(false);
-        svgEdit.setSVGImage("com/image/edit.svg", 40, 40);
+        svgEdit.setSVGImage("com/image/edit.svg", 30, 30);
         svgEdit.setVisible(false);
+        svgAccountlogo.setSVGImage("com/image/account.svg", 70, 70);
+        //svgReload.setSVGImage("com/image/reload.svg", 40, 40);
+        reload();
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,29 +41,29 @@ public class AccountGUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        searchField = new javax.swing.JTextField();
+        MainLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
+        tbAccount = new javax.swing.JTable();
+        svgEdit = new com.gui.SvgImage();
+        svgTrash = new com.gui.SvgImage();
+        tfSearch = new javax.swing.JTextField();
         svgSearch = new com.gui.SvgImage();
         svgAdd = new com.gui.SvgImage();
-        svgTrash = new com.gui.SvgImage();
-        svgEdit = new com.gui.SvgImage();
-        jButton1 = new javax.swing.JButton();
+        svgAccountlogo = new com.gui.SvgImage();
 
-        setBackground(new java.awt.Color(252, 102, 0));
-
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 40)); // NOI18N
-        jLabel1.setText("QUẢN LÝ TÀI KHOẢN");
-
-        searchField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchFieldActionPerformed(evt);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setPreferredSize(new java.awt.Dimension(1280, 620));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        MainLabel.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        MainLabel.setForeground(new java.awt.Color(255, 102, 0));
+        MainLabel.setText("QUẢN LÝ TÀI KHOẢN");
+
+        tbAccount.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -69,102 +74,142 @@ public class AccountGUI extends javax.swing.JPanel {
                 "Mã NV", "Username", "Password", "Role"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tbAccount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbAccountMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbAccount);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel2.setText("Tìm kiếm");
+        svgEdit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                svgEditMouseClicked(evt);
+            }
+        });
 
+        svgTrash.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                svgTrashMouseClicked(evt);
+            }
+        });
+
+        svgSearch.setBackground(new java.awt.Color(255, 255, 255));
+        svgSearch.setPreferredSize(new java.awt.Dimension(40, 40));
         svgSearch.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 svgSearchMouseClicked(evt);
             }
         });
 
-        jButton1.setText("reload");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        svgAdd.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                svgAddMouseClicked(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+
+        svgAccountlogo.setText("svgImage1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(svgSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 484, Short.MAX_VALUE)
+                        .addComponent(svgEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(63, 63, 63))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(434, 434, 434)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(147, 147, 147)
-                                .addComponent(jLabel2)
-                                .addGap(77, 77, 77)
-                                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 628, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(svgSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(svgTrash, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(svgAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
-                        .addComponent(svgEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(64, 64, 64))
+                        .addComponent(svgAccountlogo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44)
+                        .addComponent(MainLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(svgTrash, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69)
+                .addComponent(svgAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(0, 24, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(svgAccountlogo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MainLabel))
+                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(20, 20, 20))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(svgSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(svgAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(svgTrash, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(svgEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(56, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(svgEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(svgAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(svgTrash, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(svgSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+    public void reload(){
+        tbAccount.removeAll();
+        tbAccount.repaint();
+        accBUS.readData();
+        tbAccount.setModel(accBUS.getModel());
+        svgEdit.setVisible(false);
+        svgTrash.setVisible(false);    
+    }
+    private void tbAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbAccountMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_searchFieldActionPerformed
+        svgTrash.setVisible(true);  
+        svgEdit.setVisible(true);
+    }//GEN-LAST:event_tbAccountMouseClicked
 
     private void svgSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_svgSearchMouseClicked
-            // TODO add your handling code here:
+        // TODO add your handling code here:
+        // search by ID or role
+        tbAccount.setModel(accBUS.getModel(tfSearch.getText()));
+        if(AccountBUS.x) reload();
+        AccountBUS.x = false;
     }//GEN-LAST:event_svgSearchMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void svgAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_svgAddMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        //JFrame frADD
+        AccountInfoGUI a = new AccountInfoGUI(this);
+        a.setVisible(true);
+        a.setLocationRelativeTo(null);
+    }//GEN-LAST:event_svgAddMouseClicked
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        accBUS.readData();
-        jTable1.setModel(accBUS.getModel());
-    }//GEN-LAST:event_jButton1MouseClicked
+    private void svgEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_svgEditMouseClicked
+        // TODO add your handling code here:
+        String editID = accBUS.getAccount(tbAccount.getSelectedRow()).getUserId();
+        String editName = accBUS.getAccount(tbAccount.getSelectedRow()).getUsername();
+        String editPass = accBUS.getAccount(tbAccount.getSelectedRow()).getPassword();
+        String editRole = accBUS.getAccount(tbAccount.getSelectedRow()).getRole();
+        AccountInfoGUI a = new AccountInfoGUI(this,editID,editName,editPass,editRole);
+        a.setVisible(true);
+        a.setLocationRelativeTo(null);
+    }//GEN-LAST:event_svgEditMouseClicked
+
+    private void svgTrashMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_svgTrashMouseClicked
+        // TODO add your handling code here:
+        int ques = JOptionPane.showConfirmDialog(null, "Bạn có chắc là muốn xóa không?", "Question", JOptionPane.YES_NO_OPTION);
+        if(ques == JOptionPane.YES_OPTION) {
+            String delID = accBUS.getAccount(tbAccount.getSelectedRow()).getUserId();
+            accBUS.delete(delID);
+        }
+        reload();
+    }//GEN-LAST:event_svgTrashMouseClicked
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        // TODO add your handling code here:
+        reload();
+    }//GEN-LAST:event_formMouseClicked
 
     public static void main(String[] args) {
         JFrame f = new JFrame();
@@ -173,19 +218,17 @@ public class AccountGUI extends javax.swing.JPanel {
         f.setSize(1280,620);
         f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         f.setVisible(true);
-    
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel MainLabel;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField searchField;
+    private com.gui.SvgImage svgAccountlogo;
     private com.gui.SvgImage svgAdd;
     private com.gui.SvgImage svgEdit;
     private com.gui.SvgImage svgSearch;
     private com.gui.SvgImage svgTrash;
+    private javax.swing.JTable tbAccount;
+    private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
 }

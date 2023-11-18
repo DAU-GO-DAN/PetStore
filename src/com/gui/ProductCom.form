@@ -61,7 +61,7 @@
     <Component class="javax.swing.JLabel" name="lbImage">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="cc" red="cc" type="rgb"/>
+          <Color blue="cb" green="d2" red="a7" type="rgb"/>
         </Property>
         <Property name="opaque" type="boolean" value="true"/>
       </Properties>
@@ -77,7 +77,7 @@
         <Property name="horizontalAlignment" type="int" value="0"/>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="String price = valid.formatMoney(product.getSoldPrice());&#xa;lbSoldPrice.setText(price+&quot;&#x111;&quot;);"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="String price = valid.formatMoney(product.getSoldPrice());&#xa;lbSoldPrice.setText(price+&quot;&#x111;&quot;);&#xa;setInStock();"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="lbNameID">

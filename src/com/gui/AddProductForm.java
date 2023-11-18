@@ -39,7 +39,9 @@ public class AddProductForm extends javax.swing.JFrame {
     Validator valid = new Validator();
     private Long importPrice;
     private Long soldPrice;
-    public AddProductForm() {
+    ProductUI ui;
+    public AddProductForm(ProductUI ui) {
+        this.ui = ui;
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -360,6 +362,7 @@ public class AddProductForm extends javax.swing.JFrame {
             productBus.add(product);
             JOptionPane.showMessageDialog(null, "thêm sản phẩm thành công");
             this.dispose();
+            
         }
         else{
             JOptionPane.showMessageDialog(null, "dữ liệu trong form chưa đủ hoặc chưa chính xác");

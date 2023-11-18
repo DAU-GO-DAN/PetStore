@@ -4,11 +4,14 @@
  */
 package com.dao;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author DUC PHU
  */
 public class PetOnStoreDTO extends ProductDTO{
+    private LocalDate importDate;
     private String gender;
     private String breedId;
     private String color;
@@ -26,6 +29,15 @@ public class PetOnStoreDTO extends ProductDTO{
         this.color = color;
         this.weight = weight;
     }
+
+    public LocalDate getImportDate() {
+        return importDate;
+    }
+
+    public void setImportDate(LocalDate importDate) {
+        this.importDate = importDate;
+    }
+    
 
     public void setGender(String gender) {
         this.gender = gender;

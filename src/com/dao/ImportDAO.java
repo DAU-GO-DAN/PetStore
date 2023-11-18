@@ -41,8 +41,8 @@ public class ImportDAO {
             {
                 ImportDTO impDTO = new ImportDTO();
                 impDTO.setImportID(rs.getString("id"));
-                impDTO.setCreatedDate(rs.getString("createdDate"));
-                impDTO.setAmount(rs.getInt("totalAmount"));
+                impDTO.setCreatedDate(rs.getDate("createdDate").toLocalDate());
+                impDTO.setTotalAmount(rs.getLong("totalAmount"));
                 impDTO.setEmployeeID(rs.getString("employeeID"));
                 list.add(impDTO);
 
@@ -62,8 +62,8 @@ public class ImportDAO {
             if(rs.next()){
 
                 impDTO.setImportID(rs.getString("id"));
-                impDTO.setCreatedDate(rs.getString("createdDate"));
-                impDTO.setAmount(rs.getInt("amount"));
+                impDTO.setCreatedDate(rs.getDate("createdDate").toLocalDate());
+                impDTO.setTotalAmount(Long.parseLong(rs.getString("totalAmount")));
                 impDTO.setEmployeeID(rs.getString("employeeID"));
             }
         }
@@ -75,7 +75,7 @@ public class ImportDAO {
     
     public void add(ImportDTO imp) {
         try{
-            String qry = "insert into Import value ("
+            String qry = "insert into Import values ("
                     + "'" + imp.getImportID() + "'" 
                     + ", " + "'" + imp.getCreatedDate() + "'"  
                     + ", " + imp.getTotalAmount()
@@ -84,14 +84,14 @@ public class ImportDAO {
             stmt = conn.createStatement();
             int rowsAffected = stmt.executeUpdate(qry);
             if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Thêm phiếu nhập thành công!");
+//                JOptionPane.showMessageDialog(null, "Thêm phiếu nhập thành công!");
             } else {
                 JOptionPane.showMessageDialog(null, "Thêm phiếu nhập thất bại!");
             }
         }
         catch(SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
     }
     

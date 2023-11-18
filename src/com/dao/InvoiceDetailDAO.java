@@ -83,4 +83,28 @@ public class InvoiceDetailDAO {
         return list;
     }
     
+    public ArrayList readInvoiceDetail(String Id){
+         ArrayList<InvoiceDetailDTO> InvList= new ArrayList<>();
+         try {
+            String qry="SELECT * FROM InvoiceDetail "
+                    + "where id = '" + Id + "'";
+            stmt=conn.createStatement();
+            rs=stmt.executeQuery(qry);
+            while(rs.next()){
+                InvoiceDetailDTO Invv= new InvoiceDetailDTO();
+                Invv.setInvoiceID(rs.getString("id"));
+                Invv.setProductID(rs.getString("productID"));
+                Invv.setProductName(rs.getString("productName"));
+                Invv.setQuantity(rs.getInt("quantity"));
+                Invv.setSoldPrice(rs.getLong("soldPrice"));
+                Invv.setTotal(rs.getLong("amount"));
+                InvList.add(Invv);
+                
+            }
+        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(null,"Lỗi tải dữ liệu !");
+        }
+         return InvList;
+    }
+    
 }

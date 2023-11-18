@@ -92,7 +92,7 @@ public class BreedBUS {
         {
             if(valid.normalizeString(breed.getName()).toLowerCase().contains(valid.normalizeString(text).toLowerCase()))
             {
-                System.out.println("find text: "+valid.normalizeString(breed.getName()).toLowerCase());
+//                System.out.println("find text: "+valid.normalizeString(breed.getName()).toLowerCase());
                 matchingList.add(breed);
             }
         }

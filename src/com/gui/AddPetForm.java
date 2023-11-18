@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -39,6 +40,8 @@ public class AddPetForm extends javax.swing.JFrame {
     private Long importPrice;
     private Long soldPrice;
     Validator valid = new Validator();
+    PetOnStoreBUS petBus = new PetOnStoreBUS();
+    String id = petBus.generateID();
 
     public AddPetForm(ProductUI ui) {
         this.ui = ui;
@@ -368,6 +371,7 @@ public class AddPetForm extends javax.swing.JFrame {
                 .addGap(31, 31, 31))
         );
 
+        jLabel1.setText("Thêm Thú cưng mới - mã : "+id);
         loadSupplierList();
 
         pack();
@@ -407,8 +411,8 @@ public class AddPetForm extends javax.swing.JFrame {
         if(validInput())
         {
             PetOnStoreDTO pet = new PetOnStoreDTO();
-            PetOnStoreBUS petBus = new PetOnStoreBUS();
-            String id = petBus.generateID();
+            
+            
             if(imageUrl.equals("null"))
             {
                 pet.setImageUrl(imageUrl);
@@ -428,6 +432,9 @@ public class AddPetForm extends javax.swing.JFrame {
             pet.setName(tfName.getText()+"");
             importPrice = valid.convertStringToLong(tfImportPrice.getText());
             pet.setImportPrice(importPrice);
+            
+            pet.setImportDate(LocalDate.now());
+            
             soldPrice = valid.convertStringToLong(tfSoldPrice.getText());
             pet.setSoldPrice(soldPrice);
             pet.setDescription(tfDescription.getText()+"");

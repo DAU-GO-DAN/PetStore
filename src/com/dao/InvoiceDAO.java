@@ -79,4 +79,19 @@ public class InvoiceDAO {
         }
          return InvList;
     }
+    
+    public void delete(String id){
+        try{
+            String qry = "delete from Invoice where id = '" + id + "'";
+            stmt = conn.createStatement();
+            int rowAffected = stmt.executeUpdate(qry);
+            if(rowAffected == 1){
+                JOptionPane.showMessageDialog(null, "Xóa thành công");
+            }else{
+                JOptionPane.showMessageDialog(null, "Xóa không thành công");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Xóa không thành công");
+        }
+    }
 }

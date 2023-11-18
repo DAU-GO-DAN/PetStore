@@ -9,7 +9,7 @@ package com.dao;
  * @author DUC PHU
  */
 public class MonthlyAnalysisDTO {
-    String productID;
+    String productID, typeID;
     int month, year, soldQuantity;
     long importPrice, soldPrice, profit;
 
@@ -30,6 +30,15 @@ public class MonthlyAnalysisDTO {
         this.profit = profit;
     }
 
+    public String getTypeID() {
+        return typeID;
+    }
+
+    public void setTypeID(String typeID) {
+        this.typeID = typeID;
+    }
+    
+    
     public String getProductID() {
         return productID;
     }

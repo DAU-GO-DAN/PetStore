@@ -7,6 +7,7 @@ package com.bus;
 import com.dao.CustomerDTO;
 import com.dao.InvoiceDAO;
 import com.dao.InvoiceDTO;
+import com.gui.Validator;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -15,7 +16,10 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author huynh
  */
+
+
 public class InvoiceBUS {
+    Validator valid = new Validator();
     static InvoiceDAO invDAO = new InvoiceDAO();
     static ArrayList<InvoiceDTO> invList = new ArrayList<>();
     
@@ -33,6 +37,11 @@ public class InvoiceBUS {
         invList.add(inv);
         invDAO.add(inv);
     }
+    
+    public void delete(String id){
+        invDAO.delete(id);
+        invList.removeIf(inv -> inv.getInvoiceID().equalsIgnoreCase(id));
+    }
    
     public DefaultTableModel getModel(){
      
@@ -45,7 +54,7 @@ public class InvoiceBUS {
    for (InvoiceDTO invc : invList) {
        Vector row = new Vector<>();
        row.add(invc.getInvoiceID());
-       row.add(invc.getCreatedDate());
+       row.add(valid.toUIDate(invc.getCreatedDate()));
        row.add(invc.getTotalAmount());
        row.add(invc.getEmployeeID());
        row.add(invc.getCustomerID());

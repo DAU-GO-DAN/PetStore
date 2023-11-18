@@ -40,6 +40,16 @@ public class BreedChooser extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
+    
+    ImportPetForm importPetForm;
+    public BreedChooser(BreedBUS breed, ImportPetForm importPetForm, String flag)
+    {
+        this.flag = flag;
+        this.breed = breed;
+        this.importPetForm = importPetForm;
+        initComponents();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -174,7 +184,7 @@ public class BreedChooser extends javax.swing.JFrame {
     private void refresh()
     {
         String text = valid.normalizeString(cleanString(tfSearch.getText())).toLowerCase();
-        System.out.println("text search: "+text);
+//        System.out.println("text search: "+text);
         
         matchList = breed.search(text);
         
@@ -220,6 +230,11 @@ public class BreedChooser extends javax.swing.JFrame {
             else if(flag.equals("add"))
             {
                 BreedItem item = new BreedItem(breedTemp, addForm, this, flag);
+                Table.add(item);
+            }
+            else if(flag.equals("import"))
+            {
+                BreedItem item = new BreedItem(breedTemp, importPetForm, this, flag);
                 Table.add(item);
             }
         }

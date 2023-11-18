@@ -44,7 +44,7 @@ public class BreedAnalysisDAO {
             stmt = conn.createStatement();
             int rowsAffected = stmt.executeUpdate(qry);
             if (rowsAffected == 1) {
-                JOptionPane.showMessageDialog(null, "Thêm analysis thành công!");
+//                JOptionPane.showMessageDialog(null, "Thêm analysis thành công!");
             } else {
                 JOptionPane.showMessageDialog(null, "Thêm analysis thất bại!");
             }
@@ -71,7 +71,7 @@ public class BreedAnalysisDAO {
         }
         catch(SQLException ex)
         {
-           
+           ex.printStackTrace();
         }
         return isExist;
     }
@@ -85,11 +85,11 @@ public class BreedAnalysisDAO {
                     + ", " + " profit = profit + "+profit
                     + " where month = "+month+ " and year = "+year+ " and breedID = '" +breedID+ "'";
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(qry);
+            int rowsAffected = stmt.executeUpdate(qry);
         }
         catch(SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
         
     }
@@ -115,7 +115,7 @@ public class BreedAnalysisDAO {
         }
         catch(SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
         return list;
     }

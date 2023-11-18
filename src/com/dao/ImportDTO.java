@@ -4,19 +4,22 @@
  */
 package com.dao;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author DUC PHU
  */
 public class ImportDTO {
     private String importID;
-    private String createdDate;
+    private LocalDate createdDate;
     private long totalAmount;
     private String employeeID;
     public ImportDTO(){
         
     }
-    public ImportDTO(String createdDate, int amount, String empId) {
+    public ImportDTO(String importID, LocalDate createdDate, long amount, String empId) {
+        this.importID = importID;
         this.createdDate = createdDate;
         this.totalAmount = amount;
         this.employeeID = empId;
@@ -26,9 +29,7 @@ public class ImportDTO {
         return importID;
     }
     
-    public String getCreatedDate() {
-        return createdDate;
-    }
+    
 
     public long getTotalAmount() {
         return totalAmount;
@@ -41,13 +42,19 @@ public class ImportDTO {
     public void setImportID(String importID) {
         this.importID = importID;
     }
-    
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
+
+    public LocalDate getCreatedDate() {
+        return createdDate;
     }
 
-    public void setAmount(int amount) {
-        this.totalAmount = amount;
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
+    }
+    
+    
+
+    public void setTotalAmount(long totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public void setEmployeeID(String employeeID) {

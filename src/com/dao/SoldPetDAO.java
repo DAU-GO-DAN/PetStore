@@ -38,6 +38,7 @@ public class SoldPetDAO {
                     + ", "+ "N'" + pet.getName() + "'" 
                     + ", "+ "" + pet.getSoldPrice() + "" 
                     + ", "+ "" + pet.getImportPrice() + ""
+                    + ", " + "'" + pet.getImportDate() + "'"
                     + ", "+ "N'" + pet.getDescription() + "'"
                     + ", "+ "'" + pet.getSupplierId() + "'"
                     + ", "+ "N'" + pet.getGender() + "'"
@@ -45,15 +46,15 @@ public class SoldPetDAO {
                     + ", "+ "" + pet.getWeight()+ ""
                     + ", "+ "N'" + pet.getColor() + "'"
                     + ", " + "'" + pet.getCustomerID() + "'"
-                    + ", " + "'" + pet.getDate() + "'"
+                    + ", " + "'" + pet.getSoldDate() + "'"
                     + ", " + "'" + pet.getImageUrl() + "'"
                     + ")";
             stmt = conn.createStatement();
             int rowsAffected = stmt.executeUpdate(qry);
             if (rowsAffected == 1) {
-                JOptionPane.showMessageDialog(null, "Thêm thú cưng thành công!");
+//                JOptionPane.showMessageDialog(null, "Thêm thú cưng thành công!");
             } else {
-                JOptionPane.showMessageDialog(null, "Thêm thú cưng thất bại!");
+//                JOptionPane.showMessageDialog(null, "Thêm thú cưng thất bại!");
             }
         }
         catch(SQLException ex)
@@ -69,7 +70,7 @@ public class SoldPetDAO {
             String qry = "delete from SoldPet "
                     + " where petID ='" +ID+ "'";
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(qry);
+            int rowsAffected = stmt.executeUpdate(qry);
         }
         catch (SQLException ex){
             
@@ -94,7 +95,7 @@ public class SoldPetDAO {
                     + " imageUrl = '" +pet.getImageUrl()+"', "
                     + " where petID = '" +pet.getId()+ "'";
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(qry);
+            int rowsAffected = stmt.executeUpdate(qry);
         }
         catch (SQLException ex){
             
@@ -115,6 +116,7 @@ public class SoldPetDAO {
                 pet.setName(rs.getString("petName"));
                 pet.setSoldPrice(Long.parseLong(rs.getString("soldPrice")));
                 pet.setImportPrice(Long.parseLong(rs.getString("importPrice")));
+                pet.setImportDate(rs.getDate("importDate").toLocalDate());
                 pet.setDescription(rs.getString("Description"));
                 pet.setSupplierId(rs.getString("supplierID"));
                 pet.setGender(rs.getString("gender"));
@@ -122,7 +124,7 @@ public class SoldPetDAO {
                 pet.setWeight(Integer.parseInt(rs.getString("weight")));
                 pet.setColor(rs.getString("color"));
                 pet.setCustomerID(rs.getString("cusID"));
-                pet.setDate(rs.getDate("soldDate").toLocalDate());
+                pet.setSoldDate(rs.getDate("soldDate").toLocalDate());
                 pet.setImageUrl(rs.getString("imageUrl"));
                 SoldPetList.add(pet);
             }

@@ -13,7 +13,10 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -33,14 +36,16 @@ public class HomeGUI extends javax.swing.JFrame {
     public HomeGUI(AccountDTO acc) {
         initComponents();
         lAccInfo.setText(acc.getUsername());
-        empID = acc.getUserId();
+        this.empID = acc.getUserId();
         EmployeeBUS empBus = new EmployeeBUS();
-        empName = empBus.getName(empID);
+        this.empName = empBus.getName(empID);
         roleDivision(acc);
         colorChangeTitle();
         svgLogo.setSVGImage("com/image/logohinh.svg", 80, 80);
         svgLogout.setSVGImage("com/image/logout.svg", 30, 30);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        System.out.println("name : "+empName);
+        System.out.println("id : "+empID);
     }
     
     
@@ -284,7 +289,7 @@ public class HomeGUI extends javax.swing.JFrame {
         mainPanel.repaint();
         CustomerGUI customerPanel = new CustomerGUI();
         mainPanel.setLayout(new GridLayout(1,1));
-        customerPanel.getData();
+//        customerPanel.getData();
         mainPanel.add(customerPanel);
     }//GEN-LAST:event_lCustomerMouseClicked
 
@@ -293,10 +298,15 @@ public class HomeGUI extends javax.swing.JFrame {
         mainPanel.removeAll();
         mainPanel.revalidate();
         mainPanel.repaint();
-        CustomerGUI customerPanel = new CustomerGUI();
+        ImportGUI importPanel = null;
+        try {
+            importPanel = new ImportGUI(empID, empName);
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         mainPanel.setLayout(new GridLayout(1,1));
-        customerPanel.getData();
-        mainPanel.add(customerPanel);
+//        customerPanel.getData();
+        mainPanel.add(importPanel);
     }//GEN-LAST:event_limportMouseClicked
 
     private void lAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lAccountMouseClicked
@@ -304,10 +314,10 @@ public class HomeGUI extends javax.swing.JFrame {
         mainPanel.removeAll();
         mainPanel.revalidate();
         mainPanel.repaint();
-        CustomerGUI customerPanel = new CustomerGUI();
+        AccountGUI accPanel = new AccountGUI();
         mainPanel.setLayout(new GridLayout(1,1));
-        customerPanel.getData();
-        mainPanel.add(customerPanel);
+//        customerPanel.getData();
+        mainPanel.add(accPanel);
     }//GEN-LAST:event_lAccountMouseClicked
 
     private void lEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lEmployeeMouseClicked
@@ -326,8 +336,11 @@ public class HomeGUI extends javax.swing.JFrame {
         mainPanel.removeAll();
         mainPanel.revalidate();
         mainPanel.repaint();
-
-
+        SupplierGUI x = new SupplierGUI();
+        x.reloadData();
+        mainPanel.setLayout(new GridLayout(1,1));
+        mainPanel.add(x);
+        
     }//GEN-LAST:event_lSupplierMouseClicked
 
     private void lAnalysisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lAnalysisMouseClicked
@@ -335,6 +348,10 @@ public class HomeGUI extends javax.swing.JFrame {
         mainPanel.removeAll();
         mainPanel.revalidate();
         mainPanel.repaint();
+        
+        AnalysisPanel panel = new AnalysisPanel();
+        mainPanel.setLayout(new GridLayout(1,1));
+        mainPanel.add(panel);
 
     }//GEN-LAST:event_lAnalysisMouseClicked
 

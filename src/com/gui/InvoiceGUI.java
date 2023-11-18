@@ -5,8 +5,10 @@
 package com.gui;
 
 import com.bus.InvoiceBUS;
+import com.bus.InvoiceDetailBUS;
 import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
+import java.time.LocalDate;
 
 
 
@@ -16,20 +18,22 @@ import java.awt.event.KeyEvent;
  * @author DELL
  */
 public class InvoiceGUI extends javax.swing.JPanel {
-
+    String Idp;
     /**
      * Creates new form InvoiceGUI
      */
+    String empName, empID;
     InvoiceBUS InvBUS= new InvoiceBUS();
-    String empID; 
-    String empName;
-    public InvoiceGUI(String empID, String empName) {
+    Validator valid = new Validator();
+    public InvoiceGUI(String empName, String empID) {
         this.empID = empID;
         this.empName = empName;
         initComponents();
-        Search.setSVGImage("com/image/search.svg", 50, 50);
-        Add.setSVGImage("com/image/add.svg", 50, 50);
-        Reset.setSVGImage("com/image/reload.svg", 50, 50);
+        Search.setSVGImage("com/image/search.svg", 30, 30);
+        Add.setSVGImage("com/image/add.svg", 30, 30);
+        delete.setSVGImage("com/image/trash.svg", 30, 30);
+        Xemsvg.setSVGImage("com/image/view.svg", 30, 30);
+        svgImage1.setSVGImage("com/image/invoice.svg", 70, 70);
     }
     
 //   public static void main(String[] args) {
@@ -55,18 +59,22 @@ public class InvoiceGUI extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         Table = new javax.swing.JTable();
         SearchTxt = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         Add = new com.gui.SvgImage();
         Reset = new com.gui.SvgImage();
+        delete = new com.gui.SvgImage();
+        Xemsvg = new com.gui.SvgImage();
+        jLabel1 = new javax.swing.JLabel();
+        svgImage1 = new com.gui.SvgImage();
 
-        setBackground(new java.awt.Color(255, 51, 0));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Search.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 SearchMouseClicked(evt);
             }
         });
+        add(Search, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 150, 30, 30));
 
         Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -82,103 +90,76 @@ public class InvoiceGUI extends javax.swing.JPanel {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.Long.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         jScrollPane1.setViewportView(Table);
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 1280, 431));
 
         SearchTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SearchTxtActionPerformed(evt);
             }
         });
+        SearchTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                SearchTxtKeyPressed(evt);
+            }
+        });
+        add(SearchTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 150, 475, 28));
 
-        jLabel1.setFont(new java.awt.Font("Constantia", 0, 40)); // NOI18N
-        jLabel1.setText("Quản Lý Hóa Đơn");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(28, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(68, 68, 68))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
+        Add.setText("add");
         Add.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 AddMouseClicked(evt);
             }
         });
+        add(Add, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 150, 30, 30));
 
         Reset.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ResetMouseClicked(evt);
             }
         });
+        add(Reset, new org.netbeans.lib.awtextra.AbsoluteConstraints(871, 88, 50, 50));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addGap(37, 37, 37))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(SearchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 534, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Search, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
-                        .addComponent(Add, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(80, 80, 80)
-                        .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(155, 155, 155))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(327, 327, 327))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(Search, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(Add, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(78, 78, 78)
-                                        .addComponent(SearchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 6, Short.MAX_VALUE)))))
-                        .addGap(1, 1, 1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
-        );
+        delete.setText("de");
+        delete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteMouseClicked(evt);
+            }
+        });
+        add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 150, 30, 30));
+
+        Xemsvg.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                XemsvgMouseClicked(evt);
+            }
+        });
+        add(Xemsvg, new org.netbeans.lib.awtextra.AbsoluteConstraints(1225, 145, 40, 40));
+
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 102, 0));
+        jLabel1.setText("QUẢN LÝ HÓA ĐƠN");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 368, -1));
+
+        svgImage1.setText("svgImage1");
+        svgImage1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                svgImage1MouseClicked(evt);
+            }
+        });
+        add(svgImage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 16, 75, 75));
     }// </editor-fold>//GEN-END:initComponents
 public static boolean containsSubstring(String mainString, String subString) {
         int mainLength = mainString.length();
@@ -202,12 +183,12 @@ public static boolean containsSubstring(String mainString, String subString) {
     }//GEN-LAST:event_SearchMouseClicked
 
     private void SearchTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchTxtActionPerformed
-        // TODO add your handling code here:
-//        String input=SearchTxt.getText();
-//        if (KeyEvent.VK_ENTER == evt.getKeyCode()){
-//              Table.setModel(InvBUS.getModelId(SearchTxt.getText()));
-//        }
-//        
+      //   TODO add your handling code here:
+//          String input=SearchTxt.getText();
+//   if (KeyEvent.VK_ENTER == evt.getKeyCode()){
+//         Table.setModel(InvBUS.getModelId(SearchTxt.getText()));
+//   //}
+        
     }//GEN-LAST:event_SearchTxtActionPerformed
 
     private void ResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetMouseClicked
@@ -215,6 +196,54 @@ public static boolean containsSubstring(String mainString, String subString) {
         InvBUS.readData();
         Table.setModel(InvBUS.getModel());
     }//GEN-LAST:event_ResetMouseClicked
+
+    private void deleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseClicked
+        // TODO add your handling code here:
+//        try { 
+//          
+//            String s = (String) Table.getValueAt(Table.getSelectedRow(), 0); //Nhận giá trị tại hàng được chọn cột 0 (tức id)
+//             InvoiceDetailBUS InvDBUS = new InvoiceDetailBUS(s);
+//            InvBUS.delete(s);
+//            InvDBUS.deleteInvDT(s);
+//            
+//        } catch (Exception e) {
+//        }
+    }//GEN-LAST:event_deleteMouseClicked
+
+    private void SearchTxtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SearchTxtKeyPressed
+        // TODO add your handling code here:
+        String input=SearchTxt.getText();
+   if (KeyEvent.VK_ENTER == evt.getKeyCode()){
+         Table.setModel(InvBUS.getModelId(SearchTxt.getText()));
+   }
+    }//GEN-LAST:event_SearchTxtKeyPressed
+
+    private void XemsvgMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_XemsvgMouseClicked
+        // TODO add your handling code here:
+        String Idp=(String) Table.getModel().getValueAt(Table.getSelectedRow(),0 );
+        LocalDate day= valid.toDataDate((String) Table.getModel().getValueAt(Table.getSelectedRow(),1 ));
+        String cusID=(String) Table.getModel().getValueAt(Table.getSelectedRow(),4 );
+        System.out.println("id khach hang: "+cusID);
+//        String tt = (String) Table.getModel().getValueAt(Table.getSelectedRow(), 2);
+        Object value = Table.getValueAt(Table.getSelectedRow(), 2);
+
+String s = "";
+if (value != null) {
+    if (value instanceof Long longValue) {
+        s = String.valueOf(longValue); // Chuyển đổi từ Long sang String
+    } else {
+        s = value.toString(); // Sử dụng toString nếu không phải là Long
+    }
+}
+        InvoiceDetail IDT= new InvoiceDetail(Idp,day,s, cusID);
+      
+        IDT.setVisible(true);
+    }//GEN-LAST:event_XemsvgMouseClicked
+
+    private void svgImage1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_svgImage1MouseClicked
+        InvBUS.readData();
+        Table.setModel(InvBUS.getModel());
+    }//GEN-LAST:event_svgImage1MouseClicked
 
     private void AddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddMouseClicked
         // TODO add your handling code here:
@@ -230,8 +259,10 @@ public static boolean containsSubstring(String mainString, String subString) {
     private com.gui.SvgImage Search;
     private javax.swing.JTextField SearchTxt;
     private javax.swing.JTable Table;
+    private com.gui.SvgImage Xemsvg;
+    private com.gui.SvgImage delete;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private com.gui.SvgImage svgImage1;
     // End of variables declaration//GEN-END:variables
 }

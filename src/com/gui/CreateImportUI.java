@@ -4,12 +4,23 @@
  */
 package com.gui;
 
+import com.bus.ImportBUS;
+import com.bus.ImportDetailBUS;
+import com.bus.PetProductBUS;
+import com.bus.SupplierTempBUS;
 import com.dao.CustomerDTO;
+import com.dao.ImportDTO;
+import com.dao.ImportDetailDTO;
 import com.dao.ProductDTO;
+import com.dao.SupplierDTO;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -23,16 +34,19 @@ public class CreateImportUI extends javax.swing.JFrame {
      */
     String empID = "";
     String empName = "";
-    String cusID = "null";
-    String cusName = "null";
-    Long InvoiceAmount = 0L;
+    Long TotalImportAmount = 0L;
+    int totalQuantity = 0;
     LocalDate today = LocalDate.now();
     Validator valid = new Validator();
     ArrayList<ProductDTO> addedList = new ArrayList<>();
-    ArrayList<AddedInvoiceItem> addedPanelItemList = new ArrayList<>();
+    ArrayList<AddedImportItem> addedPanelItemList = new ArrayList<>();
+    ArrayList<SupplierDTO> supplierList = new ArrayList<>();
+    SupplierTempBUS supBus = new SupplierTempBUS();
+    String supID = "";
     public CreateImportUI(String empID, String empName) {
         this.empID = empID;
         this.empName = empName;
+        this.supplierList = supBus.supList;
         initComponents();
         svgAddBtn.setSVGImage("com/image/add.svg", 35, 35);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -62,16 +76,14 @@ public class CreateImportUI extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         lbEmployee = new javax.swing.JLabel();
         lbDate = new javax.swing.JLabel();
-        lbCustomer = new javax.swing.JLabel();
-        addCustomer = new javax.swing.JButton();
-        ChooseCustomer = new javax.swing.JButton();
-        lbInvoiceAmount = new javax.swing.JLabel();
+        lbImportAmount = new javax.swing.JLabel();
+        lbTotalImportQuantity = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Tạo hóa đơn mới");
+        jLabel1.setText("Phiếu nhập mới");
 
         jPanel4.setBackground(new java.awt.Color(255, 153, 153));
 
@@ -90,7 +102,7 @@ public class CreateImportUI extends javax.swing.JFrame {
         jLabel11.setText("Thành tiền");
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel12.setText("Đơn giá");
+        jLabel12.setText("Đơn giá nhập");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -104,8 +116,8 @@ public class CreateImportUI extends javax.swing.JFrame {
                 .addGap(122, 122, 122)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(69, 69, 69)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
                 .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -172,6 +184,11 @@ public class CreateImportUI extends javax.swing.JFrame {
         });
 
         jButton1.setText("Xác nhận");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         lbEmployee.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbEmployee.setText("Nhân viên : Nguyễn Lmao Lmao Lmao");
@@ -179,29 +196,13 @@ public class CreateImportUI extends javax.swing.JFrame {
         lbDate.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbDate.setText("Ngày : dd/MM/yyyy");
 
-        lbCustomer.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lbCustomer.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        lbCustomer.setText("Khách hàng : (chọn hoặc thêm khách mới)");
+        lbImportAmount.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbImportAmount.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lbImportAmount.setText("Tổng tiền : 0đ");
 
-        addCustomer.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        addCustomer.setText("Thêm khách mới");
-        addCustomer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addCustomerActionPerformed(evt);
-            }
-        });
-
-        ChooseCustomer.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        ChooseCustomer.setText("Chọn khách hàng");
-        ChooseCustomer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ChooseCustomerActionPerformed(evt);
-            }
-        });
-
-        lbInvoiceAmount.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lbInvoiceAmount.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        lbInvoiceAmount.setText("Tổng tiền : 0đ");
+        lbTotalImportQuantity.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lbTotalImportQuantity.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lbTotalImportQuantity.setText("Tổng số sản phẩm nhập về : 0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -213,7 +214,7 @@ public class CreateImportUI extends javax.swing.JFrame {
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(174, Short.MAX_VALUE)
+                .addGap(174, 174, 174)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(svgAddBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -224,43 +225,30 @@ public class CreateImportUI extends javax.swing.JFrame {
                             .addComponent(lbEmployee, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))
                         .addGap(203, 203, 203)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(addCustomer)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ChooseCustomer))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lbInvoiceAmount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lbCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                            .addComponent(lbImportAmount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lbTotalImportQuantity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(158, 158, 158))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(svgAddBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(svgAddBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lbEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbDate, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lbCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ChooseCustomer)
-                            .addComponent(addCustomer))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbInvoiceAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                    .addComponent(lbEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbTotalImportQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbDate, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbImportAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
         );
@@ -273,31 +261,67 @@ public class CreateImportUI extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustomerActionPerformed
-        // TODO add your handling code here:
-//        CustomerInfoGUI addCus = new CustomerInfoGUI(this);
-//        addCus.setVisible(true);
-    }//GEN-LAST:event_addCustomerActionPerformed
-
-    private void ChooseCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChooseCustomerActionPerformed
-        // TODO add your handling code here:
-//        CustomerChoose choose = new CustomerChoose(this);
-
-//        choose.setVisible(true);
-    }//GEN-LAST:event_ChooseCustomerActionPerformed
-
     private void svgAddBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_svgAddBtnMouseClicked
         // TODO add your handling code here:
-        AddInvoiceItemUI item = new AddInvoiceItemUI(this, addedList, addedPanelItemList);
+//        supID = supBus.getID(cbbSupplier.getSelectedItem().toString());
+        AddImportItemUI item = new AddImportItemUI(this, addedList, addedPanelItemList);
         item.setVisible(true);
     }//GEN-LAST:event_svgAddBtnMouseClicked
 
-    public void setCustomerInfo(CustomerDTO cus)
-    {
-        cusID = cus.getCusID();
-        cusName = cus.getCusName();
-        lbCustomer.setText("Khách hàng : "+cusName);
-    }
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        PetProductBUS proBus = new PetProductBUS();
+        ImportBUS impBus = new ImportBUS();
+        ImportDetailBUS impDetailBUS = new ImportDetailBUS();
+        ImportDTO imp = new ImportDTO();
+        String impID = "";
+        //add into import table
+        try {
+            impID = impBus.generateID();
+        } catch (SQLException ex) {
+            Logger.getLogger(CreateImportUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        imp.setImportID(impID);
+        
+        imp.setEmployeeID(empID);
+        imp.setCreatedDate(today);
+        imp.setTotalAmount(TotalImportAmount);
+        try {
+            impBus.add(imp);
+        } catch (SQLException ex) {
+            Logger.getLogger(CreateImportUI.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Import không thành công");
+        }
+        
+        
+        for(AddedImportItem item : addedPanelItemList)
+        {
+            //update quantity
+            proBus.updateQuantity(item.proID, +item.quantity);
+            
+            //add into import table
+            ImportDetailDTO impDetailItem = new ImportDetailDTO();
+            impDetailItem.setImportID(impID);
+            impDetailItem.setProductID(item.proID);
+            impDetailItem.setProductName(item.proName);
+            impDetailItem.setImportPrice(item.importPrice);
+            impDetailItem.setQuantity(item.quantity);
+            impDetailItem.setAmount(item.totalAmount);
+            try {
+                impDetailBUS.add(impDetailItem);
+            } catch (SQLException ex) {
+                Logger.getLogger(CreateImportUI.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Import detail không thành công");
+            }
+        }
+        
+        JOptionPane.showMessageDialog(null, "nhập hàng thành công");
+        ImportDetailGUI importUi = new ImportDetailGUI(imp);
+        importUi.setVisible(true);
+        importUi.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        importUi.setLocationRelativeTo(null);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     
     public void refreshAddTable()
     {
@@ -325,15 +349,37 @@ public class CreateImportUI extends javax.swing.JFrame {
         }
     }
     
-    public void editInvoiceTotal()
+    public void addImportItem(ProductDTO product)
     {
-        InvoiceAmount = 0L;
-        for(AddedInvoiceItem item : addedPanelItemList)
-        {
-            InvoiceAmount += item.totalAmount;
-        }
-        lbInvoiceAmount.setText(valid.formatMoney(InvoiceAmount)+"đ");
+        addedList.add(product);
+        AddedImportItem item = new AddedImportItem(product, this);
+        addedPanelItemList.add(item);
+        refreshAddTable();
+        editImportTotal();
     }
+    
+    public void removeImportItem(ProductDTO product)
+    {
+        addedList.removeIf(proTemp -> proTemp.getId().equalsIgnoreCase(product.getId()));
+        addedPanelItemList.removeIf(proTemp -> proTemp.proID.equalsIgnoreCase(product.getId()));
+        refreshAddTable();
+        editImportTotal();
+    }
+    
+    public void editImportTotal()
+    {
+        TotalImportAmount = 0L;
+        totalQuantity = 0;
+        for(AddedImportItem item : addedPanelItemList)
+        {
+            TotalImportAmount += item.totalAmount;
+            totalQuantity += item.quantity;
+        }
+        lbImportAmount.setText(valid.formatMoney(TotalImportAmount)+"đ");
+        lbTotalImportQuantity.setText("Tổng số sản phẩm nhập về : "+totalQuantity);
+    }
+    
+    
     
     /**
      * @param args the command line arguments
@@ -372,8 +418,6 @@ public class CreateImportUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AddTable;
-    private javax.swing.JButton ChooseCustomer;
-    private javax.swing.JButton addCustomer;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -385,10 +429,10 @@ public class CreateImportUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lbCustomer;
     private javax.swing.JLabel lbDate;
     private javax.swing.JLabel lbEmployee;
-    private javax.swing.JLabel lbInvoiceAmount;
+    private javax.swing.JLabel lbImportAmount;
+    private javax.swing.JLabel lbTotalImportQuantity;
     private com.gui.SvgImage svgAddBtn;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  *
  * @author huynh
  */
-public class ImportDetailBUS {
+public class ImportDetailBUS { 
     ImportDetailDAO impDetDAO = new ImportDetailDAO();
     public <impDetDAO> ArrayList<ImportDetailDTO> getList() throws SQLException{
         return impDetDAO.readImpDetList();
@@ -31,13 +31,10 @@ public class ImportDetailBUS {
     
     
     public void add(ImportDetailDTO impDet) throws SQLException {
-    	boolean isExist = impDetDAO.checkExistById(impDet.getImportID());
-        if (!isExist) {
+    	
              impDetDAO.add(impDet);
-            } 
-        else {
-             JOptionPane.showMessageDialog(null, "ID " +impDet.getImportID()+" đã tồn tại ");
-        }      
+            
+           
     }
     
     public void delete(String id) throws SQLException{

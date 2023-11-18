@@ -11,11 +11,12 @@ import java.time.LocalDate;
  * @author DUC PHU
  */
 public class SoldPetDTO extends ProductDTO{
+    private LocalDate importDate;
     private String gender;
     private String breedId;
     private String color;
     private int weight;
-    private LocalDate date;
+    private LocalDate soldDate;
     private String customerID;
 
     public SoldPetDTO() {
@@ -28,9 +29,27 @@ public class SoldPetDTO extends ProductDTO{
         this.breedId = breedId;
         this.color = color;
         this.weight = weight;
-        this.date = date;
+        this.soldDate = date;
         this.customerID = customerID;
     }
+
+    public LocalDate getSoldDate() {
+        return soldDate;
+    }
+
+    public void setSoldDate(LocalDate soldDate) {
+        this.soldDate = soldDate;
+    }
+
+    
+    public LocalDate getImportDate() {
+        return importDate;
+    }
+
+    public void setImportDate(LocalDate importDate) {
+        this.importDate = importDate;
+    }
+    
     
     public String getGender() {
         return gender;
@@ -48,9 +67,7 @@ public class SoldPetDTO extends ProductDTO{
         return weight;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
+    
 
     public String getCustomerID() {
         return customerID;
@@ -72,9 +89,7 @@ public class SoldPetDTO extends ProductDTO{
         this.weight = weight;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
+    
 
     public void setCustomerID(String customerID) {
         this.customerID = customerID;

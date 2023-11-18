@@ -19,6 +19,7 @@ public class BreedItem extends javax.swing.JPanel {
     BreedDTO breedTemp;
     PetOnStoreDetail petForm;
     AddPetForm addForm;
+    ImportPetForm importForm;
     BreedChooser breedChose;
     public BreedItem(BreedDTO breedTemp, PetOnStoreDetail petForm, BreedChooser breedChose, String flag) {
         this.flag = flag;
@@ -33,6 +34,17 @@ public class BreedItem extends javax.swing.JPanel {
     public BreedItem(BreedDTO breedTemp, AddPetForm addForm, BreedChooser breedChose, String flag) {
         this.flag = flag;
         this.addForm = addForm;
+        this.breedTemp = breedTemp;
+        this.breedChose = breedChose;
+        initComponents();
+        setSize(520, 36);
+        svgAdd.setSVGImage("com/image/add.svg", 36, 36);
+    }
+    
+    public BreedItem(BreedDTO breedTemp, ImportPetForm importForm, BreedChooser breedChose, String flag)
+    {
+        this.importForm = importForm;
+        this.flag = flag;
         this.breedTemp = breedTemp;
         this.breedChose = breedChose;
         initComponents();
@@ -89,6 +101,10 @@ public class BreedItem extends javax.swing.JPanel {
         else if(flag.equals("add"))
         {
             addForm.setBreed(breedTemp.getName()+"");
+        }
+        else if(flag.equals("import"))
+        {
+            importForm.setBreed(breedTemp.getName()+"");
         }
         breedChose.dispose();
     }//GEN-LAST:event_svgAddMouseClicked

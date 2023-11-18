@@ -109,4 +109,52 @@ public class AccountDAO {
         }
         return accList;
     }
+    public void add(AccountDTO acc){
+        try{
+            String qry = "insert into Account values('"
+                        + acc.getUsername()+ "','"
+                        + acc.getUserId()  + "','"
+                        + acc.getPassword()+ "',N'"
+                        + acc.getRole()    + "')";
+            stmt = conn.createStatement();
+            int rowAffected = stmt.executeUpdate(qry);
+            if (rowAffected == 1){
+                JOptionPane.showMessageDialog(null, "Thêm thành công");
+            }
+            else JOptionPane.showMessageDialog(null, "Thêm không thành công");
+        }
+        catch(SQLException e){
+        }
+    }
+    public void edit(AccountDTO acc){
+        try{
+            String qry = "update Account set"
+                        +"  userName = '"+ acc.getUsername()
+                        + "',userID = '"  + acc.getUserId()  
+                        + "',password = '"+ acc.getPassword()
+                        + "',role = '"  + acc.getRole()    
+                        + "' where userID = '"+acc.getUserId()+"'";
+            stmt = conn.createStatement();
+            int rowAffected = stmt.executeUpdate(qry);
+            if (rowAffected == 1){
+                JOptionPane.showMessageDialog(null, "Sửa thành công");
+            }
+            else JOptionPane.showMessageDialog(null, rowAffected + "Sửa không thành công");
+        }
+        catch(SQLException e){
+        }
+    }
+    public void delete(String id){
+        try{
+            String qry = "Delete from Account where userID = '"+id+"'";
+            stmt = conn.createStatement();
+            int rowAffected = stmt.executeUpdate(qry);
+            if (rowAffected == 1){
+                JOptionPane.showMessageDialog(null, "Xóa thành công");
+            }
+            else JOptionPane.showMessageDialog(null, "Xóa không thành công");
+        }
+        catch(SQLException e){
+        }
+    }
 }

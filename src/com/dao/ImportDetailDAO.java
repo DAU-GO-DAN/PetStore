@@ -58,10 +58,10 @@ public class ImportDetailDAO {
     
     public void add(ImportDetailDTO impDet) {
         try{
-            String qry = "insert into ImportDetail value ("
+            String qry = "insert into ImportDetail values ("
                     + "'" + impDet.getImportID() + "'" 
                     + ", " + "'" + impDet.getProductID()+ "'"  
-                    + ", " + "'" + impDet.getProductName()+ "'"  
+                    + ", " + "N'" + impDet.getProductName()+ "'"  
                     + ", "  + impDet.getQuantity()
                     + ", "  + impDet.getImportPrice()
                     + ", " + impDet.getSoldPrice()
@@ -70,14 +70,14 @@ public class ImportDetailDAO {
             stmt = conn.createStatement();
             int rowsAffected = stmt.executeUpdate(qry);
             if (rowsAffected == 1) {
-                JOptionPane.showMessageDialog(null, "Thêm chi tiết phiếu nhập thành công!");
+//                JOptionPane.showMessageDialog(null, "Thêm chi tiết phiếu nhập thành công!");
             } else {
                 JOptionPane.showMessageDialog(null, "Thêm chi tiết phiếu nhập thất bại!");
             }
         }
         catch(SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
     }
     
@@ -127,7 +127,7 @@ public class ImportDetailDAO {
             stmt = conn.createStatement();
             int rowsAffected = stmt.executeUpdate(qry);
             if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Chỉnh sửa thành công!");
+//                JOptionPane.showMessageDialog(null, "Chỉnh sửa thành công!");
             } else {
                 JOptionPane.showMessageDialog(null, "Chỉnh sửa thất bại!");
             }
@@ -144,7 +144,7 @@ public class ImportDetailDAO {
             stmt = conn.createStatement();
             int rowsAffected = stmt.executeUpdate(qry);
             if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Xóa thành công!");
+//                JOptionPane.showMessageDialog(null, "Xóa thành công!");
             } else {
                 JOptionPane.showMessageDialog(null, "Xóa thất bại!");
             }

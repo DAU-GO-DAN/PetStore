@@ -49,14 +49,15 @@ public class PetProductDAO {
             stmt = conn.createStatement();
             int rowAffected = stmt.executeUpdate(qry);
             if(rowAffected == 1){
-                JOptionPane.showMessageDialog(null, "Thêm thành công");
+//                JOptionPane.showMessageDialog(null, "Thêm thành công");
             }else{
-                JOptionPane.showMessageDialog(null, "Thêm không thành công");
+//                JOptionPane.showMessageDialog(null, "Thêm không thành công");
             }
         }
         catch(SQLException ex)
         {
-            JOptionPane.showMessageDialog(null, "Thêm không thành công");
+//            JOptionPane.showMessageDialog(null, "Thêm không thành công");
+            ex.printStackTrace();
         }
     }
     
@@ -66,11 +67,11 @@ public class PetProductDAO {
             String qry = "delete from PetProduct "
                     + " where ID ='" +ID+ "'";
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(qry);
+            int rowsAffected = stmt.executeUpdate(qry);
         }
         catch (SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
     }
     
@@ -89,11 +90,11 @@ public class PetProductDAO {
                     + " imageUrl = '" +product.getImageUrl()+"' "
                     + " where ID = '" +product.getId()+ "'";
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(qry);
+            int rowsAffected = stmt.executeUpdate(qry);
         }
         catch (SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
     }
     
@@ -105,11 +106,11 @@ public class PetProductDAO {
                     + " inStock =  inStock + " +quantity
                     + " where ID = '" +ID+ "'";
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(qry);
+            int rowsAffected = stmt.executeUpdate(qry);
         }
         catch(SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
     }
     

@@ -38,6 +38,7 @@ public class MonthlyAnalysisDAO {
                     + "" + analysis.getMonth()+ "" 
                     + ", "+ "" + analysis.getYear()+ "" 
                     + ", "+ "'" + analysis.getProductID() + "'" 
+                    + ", "+ "'" + analysis.getTypeID() + "'" 
                     + ", "+ "" + analysis.getImportPrice() + "" 
                     + ", "+ "" + analysis.getSoldPrice()+ "" 
                     + ", "+ "" + analysis.getSoldQuantity() + "" 
@@ -72,7 +73,7 @@ public class MonthlyAnalysisDAO {
         }
         catch(SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
         return isExist;
     }
@@ -86,11 +87,11 @@ public class MonthlyAnalysisDAO {
                     + ", " + " profit = profit + "+profit
                     + " where month = "+month+ " and year = "+year+ " and productID = '" +productID+ "'";
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(qry);
+            int rowsAffected = stmt.executeUpdate(qry);
         }
         catch(SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
     }
     
@@ -107,18 +108,19 @@ public class MonthlyAnalysisDAO {
                 analysis.setMonth(Integer.parseInt(rs.getString("month")));
                 analysis.setYear(Integer.parseInt(rs.getString("year")));
                 analysis.setProductID(rs.getString("productID"));
+                analysis.setTypeID(rs.getString("typeID"));
                 analysis.setImportPrice(Long.parseLong(rs.getString("importPrice")));
                 analysis.setSoldPrice(Long.parseLong(rs.getString("soldPrice")));
                 analysis.setSoldQuantity(Integer.parseInt(rs.getString("quantity")));
            
-                analysis.setProfit(Long.parseLong(rs.getString("soldPrice")));
+                analysis.setProfit(Long.parseLong(rs.getString("profit")));
                 list.add(analysis);
                 
             }
         }
         catch(SQLException ex)
         {
-            
+            ex.printStackTrace();
         }
         return list;
     }

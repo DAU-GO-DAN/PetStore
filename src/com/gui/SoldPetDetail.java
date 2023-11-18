@@ -65,6 +65,8 @@ public class SoldPetDetail extends javax.swing.JFrame {
         tfDescription = new javax.swing.JTextArea();
         jLabel14 = new javax.swing.JLabel();
         lbImage = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        tfImportDate = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -143,6 +145,12 @@ public class SoldPetDetail extends javax.swing.JFrame {
         lbImage.setBackground(new java.awt.Color(255, 255, 255));
         lbImage.setOpaque(true);
 
+        jLabel15.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel15.setText("Ngày nhập");
+
+        tfImportDate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tfImportDate.setText("11/9");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -178,7 +186,9 @@ public class SoldPetDetail extends javax.swing.JFrame {
                     .addComponent(tfGender, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfImportDate, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(208, 208, 208))
         );
         layout.setVerticalGroup(
@@ -227,20 +237,27 @@ public class SoldPetDetail extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfDate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(tfDate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfImportDate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbImage, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lbImage, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(135, Short.MAX_VALUE))
         );
 
+        lbTitle.setText("Chi tiết thông tin bán của thú");
         String soldPriceString = valid.formatMoney(pet.getSoldPrice());
         tfSoldPrice.setText(""+soldPriceString);
         String importPriceString = valid.formatMoney(pet.getImportPrice());
@@ -253,6 +270,7 @@ public class SoldPetDetail extends javax.swing.JFrame {
         setCustomer();
         setDate();
         setImage();
+        setImportDate();
 
         pack();
         setLocationRelativeTo(null);
@@ -282,8 +300,14 @@ public class SoldPetDetail extends javax.swing.JFrame {
     public void setDate()
     {
         String date = "";
-        date = valid.toUIDate(pet.getDate());
+        date = valid.toUIDate(pet.getSoldDate());
         tfDate.setText(date);
+    }
+    
+    public void setImportDate()
+    {
+        
+        tfImportDate.setText(valid.toUIDate(pet.getImportDate()));
     }
     
     public void setImage()
@@ -345,6 +369,7 @@ public class SoldPetDetail extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -360,6 +385,7 @@ public class SoldPetDetail extends javax.swing.JFrame {
     private javax.swing.JTextField tfDate;
     private javax.swing.JTextArea tfDescription;
     private javax.swing.JTextField tfGender;
+    private javax.swing.JTextField tfImportDate;
     private javax.swing.JTextField tfImportPrice;
     private javax.swing.JTextField tfSoldPrice;
     private javax.swing.JTextField tfSupplier;

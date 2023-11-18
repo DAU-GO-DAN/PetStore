@@ -37,13 +37,14 @@ public class PetProductDetail extends javax.swing.JFrame {
     PetProductTypeBUS typeBus = new PetProductTypeBUS();
     PetProductBUS productBus = new PetProductBUS();
     PetProductDTO product;
-    
+    ProductCom com;
     private String supName;
     private String typeName;
     Validator valid = new Validator();
-    public PetProductDetail(PetProductDTO product) {
+    public PetProductDetail(PetProductDTO product, ProductCom com) {
         this.product = product;
         this.imageUrl = product.getImageUrl();
+        this.com = com;
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -395,6 +396,7 @@ public class PetProductDetail extends javax.swing.JFrame {
 
         productBus.edit(product);
         loadInfo();
+        com.refreshInfo();
 //        ui.refreshTable();
     }//GEN-LAST:event_btnSaveActionPerformed
 

@@ -42,6 +42,7 @@ public class PetOnStoreDAO {
                     + "N'" + pet.getName() + "', "
                     + pet.getSoldPrice() + ", "
                     + pet.getImportPrice() + ", "
+                    + "'" + pet.getImportDate() + "', "
                     + "N'" + pet.getDescription() + "', "
                     + "'" + pet.getSupplierId() + "', "
                     + "N'" + pet.getGender() + "', "
@@ -53,13 +54,14 @@ public class PetOnStoreDAO {
             stmt = conn.createStatement();
             int rowAffected = stmt.executeUpdate(qry);
             if(rowAffected == 1){
-                JOptionPane.showMessageDialog(null, "Thêm thành công");
+//                JOptionPane.showMessageDialog(null, "Thêm thành công");
             }else{
-                JOptionPane.showMessageDialog(null, "Thêm không thành công");
+//                JOptionPane.showMessageDialog(null, "Thêm không thành công");
             }        
         }
         catch(Exception e){
             JOptionPane.showMessageDialog(null, "Thêm không thành công");
+            e.printStackTrace();
         }
         
         
@@ -100,11 +102,12 @@ public class PetOnStoreDAO {
             String qry = "delete from PetOnStore "
                     + " where petID ='" +ID+ "'";
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(qry);
+            int rowsAffected = stmt.executeUpdate(qry);
         }
         catch (SQLException ex)
         {
-            JOptionPane.showMessageDialog(null, "Xóa thú cưng thất bại!");
+//            JOptionPane.showMessageDialog(null, "Xóa thú cưng thất bại!");
+            ex.printStackTrace();
         }
     }
     
@@ -117,6 +120,7 @@ public class PetOnStoreDAO {
                     + " petName = N'" +pet.getName()+"', "
                     + " soldPrice = " +pet.getSoldPrice()+", "
                     + " importPrice = " +pet.getImportPrice()+", "
+                    + " importDate = '" +pet.getImportDate()+"', "
                     + " Description = N'" +pet.getDescription()+"', "
                     + " gender = N'" +pet.getGender()+ "', "
                     + " breedID = '" +pet.getBreedId()+"', "
@@ -125,11 +129,12 @@ public class PetOnStoreDAO {
                     + " imageUrl = '" +pet.getImageUrl()+"'"
                     + " where petID = '" +pet.getId()+ "'";
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(qry);
+            int rowsAffected = stmt.executeUpdate(qry);
         }
         catch (SQLException ex)
         {
 //            JOptionPane.showMessageDialog(null, "Chỉnh sửa thú cưng thất bại!");
+            ex.printStackTrace();
         }
     }
     
@@ -147,6 +152,7 @@ public class PetOnStoreDAO {
                 pet.setName(rs.getString("petName"));
                 pet.setSoldPrice(Long.parseLong(rs.getString("soldPrice")));
                 pet.setImportPrice(Long.parseLong(rs.getString("importPrice")));
+                pet.setImportDate(rs.getDate("importDate").toLocalDate());
                 pet.setDescription(rs.getString("Description"));
                 pet.setSupplierId(rs.getString("supplierID"));
                 pet.setGender(rs.getString("gender"));
