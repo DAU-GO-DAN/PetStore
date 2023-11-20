@@ -8,6 +8,8 @@ import com.bus.MonthlyAnalysisBUS;
 import com.bus.SoldPetBUS;
 import com.dao.BreedAnalysisDTO;
 import com.dao.MonthlyAnalysisDTO;
+import com.dao.PetProductDTO;
+import com.dao.ProductDTO;
 import com.dao.SoldPetDTO;
 import java.util.ArrayList;
 
@@ -46,7 +48,7 @@ public class MonthItem extends javax.swing.JPanel {
         lbSoldQuantity = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lbRevenue = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnSoldList = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -62,10 +64,10 @@ public class MonthItem extends javax.swing.JPanel {
 
         lbRevenue.setText("0");
 
-        jButton1.setText("...");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSoldList.setText("...");
+        btnSoldList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSoldListActionPerformed(evt);
             }
         });
 
@@ -80,7 +82,7 @@ public class MonthItem extends javax.swing.JPanel {
             .addComponent(lbRevenue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSoldList, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -97,49 +99,92 @@ public class MonthItem extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbRevenue)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSoldList, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(60, 60, 60))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnSoldListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSoldListActionPerformed
         // TODO add your handling code here:
-        if(flag.equalsIgnoreCase("pet"))
+        
+        //tìm tất cả
+        if(flag.equalsIgnoreCase("all"))
         {
             SoldPetBUS soldPetBus = new SoldPetBUS();
-            ArrayList<SoldPetDTO> soldList = new ArrayList<>();
+            MonthlyAnalysisBUS monthAnalysisBus = new MonthlyAnalysisBUS();
+            ArrayList<SoldList> soldList = new ArrayList<>();
             for(SoldPetDTO soldPetTemp : soldPetBus.soldList)
             {
-                if(soldPetTemp.getBreedId().equalsIgnoreCase(category) && 
+                if(soldPetTemp.getSoldDate().getMonthValue() == month && 
+                        soldPetTemp.getSoldDate().getYear() == year)
+                {
+                    SoldList soldItem = new SoldList();
+                    soldItem.setName(soldPetTemp.getName());
+                    soldItem.setQuantity(1);
+                    soldList.add(soldItem);
+                }
+            }
+            
+            for(MonthlyAnalysisDTO monthSoldTemp : monthAnalysisBus.analysisList)
+            {
+                if(monthSoldTemp.getMonth() == month && 
+                        monthSoldTemp.getYear() == year)
+                {
+                    SoldList soldItem = new SoldList();
+                    soldItem.setName(monthSoldTemp.getProductID());
+                    soldItem.setQuantity(monthSoldTemp.getSoldQuantity());
+                    soldList.add(soldItem);
+                }
+            }
+            SoldListUI listUI = new SoldListUI(soldList, flag);
+            listUI.setVisible(true);
+        }        
+        
+        //tìm thú
+        else if(flag.equalsIgnoreCase("pet"))
+        {
+            SoldPetBUS soldPetBus = new SoldPetBUS();
+            ArrayList<SoldList> soldList = new ArrayList<>();
+            for(SoldPetDTO soldPetTemp : soldPetBus.soldList)
+            {
+                if(soldPetTemp.getBreedId().equalsIgnoreCase(category) &&  
                         soldPetTemp.getSoldDate().getMonthValue() == month && 
                         soldPetTemp.getSoldDate().getYear() == year)
                 {
-                    soldList.add(soldPetTemp);
+                    SoldList soldItem = new SoldList();
+                    soldItem.setName(soldPetTemp.getName());
+                    soldItem.setQuantity(1);
+                    soldList.add(soldItem);
                 }
             }
             SoldListUI listUI = new SoldListUI(soldList, flag);
             listUI.setVisible(true);
         }
         
+        
+        //tìm sản phảm cho thú
         else if(flag.equalsIgnoreCase("product"))
         {
             MonthlyAnalysisBUS monthAnalysisBus = new MonthlyAnalysisBUS();
-            ArrayList<MonthlyAnalysisDTO> monthSoldList = new ArrayList<>();
+            ArrayList<SoldList> soldList = new ArrayList<>();
             for(MonthlyAnalysisDTO monthSoldTemp : monthAnalysisBus.analysisList)
             {
                 if(monthSoldTemp.getTypeID().equalsIgnoreCase(category) && 
                         monthSoldTemp.getMonth() == month && 
                         monthSoldTemp.getYear() == year)
                 {
-                    monthSoldList.add(monthSoldTemp);
+                    SoldList soldItem = new SoldList();
+                    soldItem.setName(monthSoldTemp.getProductID());
+                    soldItem.setQuantity(monthSoldTemp.getSoldQuantity());
+                    soldList.add(soldItem);
                 }
             }
-            SoldListUI listUI = new SoldListUI(monthSoldList, flag);
+            SoldListUI listUI = new SoldListUI(soldList, flag);
             listUI.setVisible(true);
         }
 //        SoldListUI soldListUI = new SoldListUI();
 //        soldListUI.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnSoldListActionPerformed
 
     public void setCategory(String category)
     {
@@ -185,7 +230,7 @@ public class MonthItem extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnSoldList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel lbMonth;

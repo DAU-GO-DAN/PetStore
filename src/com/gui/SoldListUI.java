@@ -22,22 +22,15 @@ public class SoldListUI extends javax.swing.JFrame {
      */
     
     String flag = "";
-    ArrayList<SoldPetDTO> soldPetList = new ArrayList<>();
-    ArrayList<MonthlyAnalysisDTO> soldProList = new ArrayList<>();
+    
     int size = 0;
-    public SoldListUI(ArrayList soldList, String flag) {
+    ArrayList<SoldList> soldList;
+    public SoldListUI(ArrayList<SoldList> soldList, String flag) {
         
         this.flag = flag;
         this.size = soldList.size();
-        if(flag.equalsIgnoreCase("pet"))
-        {
-            soldPetList = soldList;
-        }
+        this.soldList = soldList;
         
-        else if(flag.equalsIgnoreCase("product"))
-        {
-            soldProList = soldList;
-        }
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -185,24 +178,15 @@ public class SoldListUI extends javax.swing.JFrame {
             
         }
         
-        else if(flag.equalsIgnoreCase("pet"))
-        {
-            for(SoldPetDTO soldPetTemp : soldPetList)
+       
+            for(SoldList soldTemp : soldList)
             {
-                SoldItem item = new SoldItem(soldPetTemp.getName(), 1);
+                SoldItem item = new SoldItem(soldTemp.getName(), soldTemp.getQuantity());
                 Table.add(item);
             }
-        }
         
-        else if(flag.equalsIgnoreCase("product"))
-        {
-            PetProductBUS proBus = new PetProductBUS();
-            for(MonthlyAnalysisDTO soldProTemp : soldProList)
-            {
-                SoldItem item = new SoldItem(proBus.getName(soldProTemp.getProductID()), soldProTemp.getSoldQuantity());
-                Table.add(item);
-            }
-        }
+        
+        
         
         
     }

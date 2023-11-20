@@ -564,6 +564,7 @@ public class AddInvoice extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Hoàn tất thanh toán");
             InvoiceDetail invForm = new InvoiceDetail(newInvoice);
             invForm.setVisible(true);
+            this.dispose();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

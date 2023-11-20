@@ -78,6 +78,8 @@ public class EmployeeBUS {
         empList.add(emp);
         return true;
     }
+    
+    
     public String generateEmployeeID(){
         String id = null;
         String prefix = "NV";
@@ -121,6 +123,17 @@ public class EmployeeBUS {
 
         return normalizedName;
     }
+    
+    
+    public boolean numOnly(String input){
+        return input.matches("\\d+");
+    }
+    
+    
+    public boolean startsWithZero(String phoneNumber) {
+    return phoneNumber.startsWith("0");
+}
+    
     public boolean isVietnamese(String input) {
         // Biểu thức chính quy để kiểm tra dấu tiếng Việt
         String regex = "^[\\p{L} .'-]+$";
@@ -134,13 +147,8 @@ public class EmployeeBUS {
         // Trả về true nếu chuỗi hợp lệ (chứa dấu tiếng Việt), ngược lại trả về false
         return matcher.matches();
     }
-
-    public boolean numOnly(String input){
-        return input.matches("\\d+");
-    }
-    public boolean startsWithZero(String phoneNumber) {
-    return phoneNumber.startsWith("0");
-}
+    
+    
 
     
     public void edit(EmployeeDTO empDTO, String id){
@@ -148,6 +156,7 @@ public class EmployeeBUS {
         empList.removeIf(emp -> emp.getId().equals(id));
         empList.add(empDTO);
     }
+    
     
 //    public LocalDate generateEmployeeCreatedDate(){
 //        LocalDate currentDate = LocalDate.now();
@@ -161,18 +170,26 @@ public class EmployeeBUS {
     }
     
     
-    
     public EmployeeDTO searchByID(String id){
-        for (EmployeeDTO empDTO : empList) {
-            //Phải nhập đầy đủ ID nhân viên
-//            if(empDTO.getId().equals(id))return empDTO;
-
+        EmployeeDTO emp  = new EmployeeDTO();
+        String normalizedInput = normalizeID(id.toLowerCase()); 
+        for (EmployeeDTO empDTO : empList) 
+        {
+            String normalizedEmpId = normalizeID(empDTO.getId().toLowerCase());
+             
             //Tìm kiếm nhân viên theo ID chỉ cần nhập 1-2 kí tự
             if (empDTO.getId().matches(".*" + id + ".*")) {
-            return empDTO;
+            return emp;
+            }
+        
         }
-        }
-        return null;
+        return emp;
+    }
+    
+    private String normalizeID(String input) {
+        String normalized = Normalizer.normalize(input, Form.NFD);
+        normalized = normalized.replaceAll("[^a-zA-Z0-9]", ""); // Giữ lại chỉ chữ cái và số
+        return normalized;
     }
     
      public ArrayList<EmployeeDTO> searchByIDList(String id){
@@ -197,17 +214,8 @@ public class EmployeeBUS {
     }
     
      
-     private String normalizeID(String input) {
-        String normalized = Normalizer.normalize(input, Form.NFD);
-        normalized = normalized.replaceAll("[^a-zA-Z0-9]", ""); // Giữ lại chỉ chữ cái và số
-//        normalized = normalized.replaceAll("[^\\p{ASCII}0-9 \\t\\n\\x0B\\f\\r]", "");
-//        normalized = normalized.toLowerCase(); // Convert to lowercase
-
-        return normalized;
-    }
      
     public DefaultTableModel getIdModel(String id){
-//        EmployeeDTO empDTO = searchByID(id);
         ArrayList<EmployeeDTO> filtered = searchByIDList(id);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DefaultTableModel model = new DefaultTableModel();
@@ -219,7 +227,6 @@ public class EmployeeBUS {
         model.addColumn("Chức vụ");
         model.addColumn("Lương");  
         for (EmployeeDTO empDTO : filtered) {
-
             Vector row = new Vector<>();
             row.add(empDTO.getId());
             row.add(empDTO.getName());
@@ -233,28 +240,7 @@ public class EmployeeBUS {
         return model;
     }
     
-    public ArrayList<EmployeeDTO> searchByName(String name) {
-        ArrayList<EmployeeDTO> filteredList = new ArrayList<>();
-        for (EmployeeDTO empDTO : empList) {
-            String normalizedEmpName = normalizeString(empDTO.getName());
-            String normalizedSearchName = normalizeString(name);
-            if (normalizedEmpName.toLowerCase().contains(normalizedSearchName.toLowerCase())) {
-                filteredList.add(empDTO);
-            }
-        }
-        return filteredList;
-    }
-    
-    
-    private String normalizeString(String input) {
-        String normalized = Normalizer.normalize(input, Form.NFD);
-        normalized = normalized.replaceAll("[đĐ]", "d");
-        normalized = normalized.replaceAll("[^\\p{ASCII} \\t\\n\\x0B\\f\\r]", "");
-        return normalized;
-    }
-    
-     public DefaultTableModel getNameModel(String name)
-     {
+    public DefaultTableModel getNameModel(String name){
         ArrayList<EmployeeDTO> filtered = searchByName(name);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DefaultTableModel model = new DefaultTableModel();
@@ -278,13 +264,31 @@ public class EmployeeBUS {
         }
         return model;
     }
-     
-     public boolean containsInput(String input) {
-//        return input.matches("^[a-zA-Z\\p{L} ]*$");
-//        return input.matches("^[a-zA-Z\\p{L} \\p{Punct}]*$");
+    public boolean containsInput(String input) {
           return input.matches("^[a-zA-Z0-9\\p{L} \\p{Punct}]*$");
-
     }
+    
+    public ArrayList<EmployeeDTO> searchByName(String name) {
+        ArrayList<EmployeeDTO> filteredList = new ArrayList<>();
+        for (EmployeeDTO empDTO : empList) {
+            String normalizedEmpName = normalizeString(empDTO.getName());
+            String normalizedSearchName = normalizeString(name);
+            if (normalizedEmpName.toLowerCase().contains(normalizedSearchName.toLowerCase())) {
+                filteredList.add(empDTO);
+            }
+        }
+        return filteredList;
+    }
+    
+    
+    private String normalizeString(String input) {
+        String normalized = Normalizer.normalize(input, Form.NFD);
+        normalized = normalized.replaceAll("[đĐ]", "d");
+        normalized = normalized.replaceAll("[^\\p{ASCII} \\t\\n\\x0B\\f\\r]", "");
+        return normalized;
+    }
+    
+     
      
     public boolean containsOnlyLetters(String input) {
         return input.matches("^[a-zA-Z\\p{L} ]*$");

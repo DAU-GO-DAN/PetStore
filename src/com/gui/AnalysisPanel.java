@@ -99,7 +99,7 @@ public class AnalysisPanel extends javax.swing.JPanel {
         jLabel4.setText("Theo(thú hoặc sản phẩm)");
 
         cbbProductChoose.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        cbbProductChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Thú", "Sản phẩm cho thú" }));
+        cbbProductChoose.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Thú", "Sản phẩm cho thú" }));
         cbbProductChoose.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbbProductChooseItemStateChanged(evt);
@@ -200,7 +200,12 @@ public class AnalysisPanel extends javax.swing.JPanel {
             item.setYear(year);
         }
         
-        if(flag.equalsIgnoreCase("pet"))
+        if(flag.equalsIgnoreCase("all"))
+        {
+            
+        }
+        
+        else if(flag.equalsIgnoreCase("pet"))
         {
             
             String breName = cbbCategoryChoose.getSelectedItem().toString();
@@ -258,9 +263,15 @@ public class AnalysisPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         productChoose = cbbProductChoose.getSelectedItem().toString();
         cbbCategoryChoose.removeAllItems();
-        if(productChoose.equalsIgnoreCase("Thú"))
+        if(productChoose.equalsIgnoreCase("tất cả"))
+        {
+            cbbCategoryChoose.addItem("Tất cả");
+            flag = "all";
+        }
+        else if(productChoose.equalsIgnoreCase("Thú"))
         {
             flag = "pet";
+            cbbCategoryChoose.addItem("Tất cả");
             for(BreedDTO bre : breBus.breedList)
             {
                 cbbCategoryChoose.addItem(bre.getName());
@@ -269,6 +280,7 @@ public class AnalysisPanel extends javax.swing.JPanel {
         else if(productChoose.equalsIgnoreCase("Sản phẩm cho thú"))
         {
             flag = "product";
+            cbbCategoryChoose.addItem("Tất cả");
             for(PetProductTypeDTO type : typeBus.typeList)
             {
                 cbbCategoryChoose.addItem(type.getName());
@@ -286,10 +298,9 @@ public class AnalysisPanel extends javax.swing.JPanel {
 
     public void loadCbbCategoryDefault()
     {
-        for(BreedDTO bre : breBus.breedList)
-            {
-                cbbCategoryChoose.addItem(bre.getName());
-            }
+        
+                cbbCategoryChoose.addItem("Tất cả");
+            
     }
     
     public void loadMonthItem()

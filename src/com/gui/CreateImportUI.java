@@ -275,51 +275,60 @@ public class CreateImportUI extends javax.swing.JFrame {
         ImportDetailBUS impDetailBUS = new ImportDetailBUS();
         ImportDTO imp = new ImportDTO();
         String impID = "";
-        //add into import table
-        try {
-            impID = impBus.generateID();
-        } catch (SQLException ex) {
-            Logger.getLogger(CreateImportUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        imp.setImportID(impID);
         
-        imp.setEmployeeID(empID);
-        imp.setCreatedDate(today);
-        imp.setTotalAmount(TotalImportAmount);
-        try {
-            impBus.add(imp);
-        } catch (SQLException ex) {
-            Logger.getLogger(CreateImportUI.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Import không thành công");
-        }
-        
-        
-        for(AddedImportItem item : addedPanelItemList)
+        if(addedPanelItemList.isEmpty())
         {
-            //update quantity
-            proBus.updateQuantity(item.proID, +item.quantity);
-            
-            //add into import table
-            ImportDetailDTO impDetailItem = new ImportDetailDTO();
-            impDetailItem.setImportID(impID);
-            impDetailItem.setProductID(item.proID);
-            impDetailItem.setProductName(item.proName);
-            impDetailItem.setImportPrice(item.importPrice);
-            impDetailItem.setQuantity(item.quantity);
-            impDetailItem.setAmount(item.totalAmount);
+            JOptionPane.showMessageDialog(null, "Chưa có sản phẩm");
+        }
+        else{
             try {
-                impDetailBUS.add(impDetailItem);
+                impID = impBus.generateID();
             } catch (SQLException ex) {
                 Logger.getLogger(CreateImportUI.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(null, "Import detail không thành công");
             }
-        }
+            imp.setImportID(impID);
+
+            imp.setEmployeeID(empID);
+            imp.setCreatedDate(today);
+            imp.setTotalAmount(TotalImportAmount);
+            try {
+                impBus.add(imp);
+            } catch (SQLException ex) {
+                Logger.getLogger(CreateImportUI.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Import không thành công");
+            }
         
-        JOptionPane.showMessageDialog(null, "nhập hàng thành công");
-        ImportDetailGUI importUi = new ImportDetailGUI(imp);
-        importUi.setVisible(true);
-        importUi.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        importUi.setLocationRelativeTo(null);
+        
+            for(AddedImportItem item : addedPanelItemList)
+            {
+                //update quantity
+                proBus.updateQuantity(item.proID, +item.quantity);
+
+                //add into import table
+                ImportDetailDTO impDetailItem = new ImportDetailDTO();
+                impDetailItem.setImportID(impID);
+                impDetailItem.setProductID(item.proID);
+                impDetailItem.setProductName(item.proName);
+                impDetailItem.setImportPrice(item.importPrice);
+                impDetailItem.setQuantity(item.quantity);
+                impDetailItem.setAmount(item.totalAmount);
+                try {
+                    impDetailBUS.add(impDetailItem);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CreateImportUI.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "Import detail không thành công");
+                }
+            }
+        
+            JOptionPane.showMessageDialog(null, "nhập hàng thành công");
+            ImportDetailGUI importUi = new ImportDetailGUI(imp);
+            importUi.setVisible(true);
+            importUi.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            importUi.setLocationRelativeTo(null);
+            this.dispose();
+        }
+        //add into import table
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     

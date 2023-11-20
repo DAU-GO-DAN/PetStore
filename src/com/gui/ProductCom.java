@@ -51,6 +51,9 @@ public class ProductCom extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 255, 255));
 
         lbImage.setBackground(new java.awt.Color(167, 210, 203));
+        lbImage.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lbImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbImage.setText("Chưa có ảnh");
         lbImage.setOpaque(true);
 
         lbSoldPrice.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -139,9 +142,10 @@ public class ProductCom extends javax.swing.JPanel {
     {
         if(product.getImageUrl().equals("null"))
         {
-            
+            lbImage.setText("Chưa có ảnh");
         }
         else{
+            lbImage.setText("");
             int labelWidth = 347;
             int labelHeight = 176;
             String imageUrl = product.getImageUrl();

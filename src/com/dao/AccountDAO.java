@@ -83,17 +83,26 @@ public class AccountDAO {
             rs = stmt.executeQuery(qry);
             if(rs.next()){
                 return true;
-            }        
+            }
+            else{
+                qry = "select * from Employee " + "where empID = '"+ username +"'";
+                stmt = conn.createStatement();
+                rs = stmt.executeQuery(qry);
+                if(rs.next()) return true;
+                
+            }
         }
         catch(SQLException e){
             
         }
         return false;
     }
+    
+    
     public ArrayList readData(){
         ArrayList<AccountDTO> accList = new ArrayList<>();
         try{
-            String qry = "select * from Account";
+            String qry = "select * from Account order by userID";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(qry);
             while(rs.next()){
@@ -109,6 +118,8 @@ public class AccountDAO {
         }
         return accList;
     }
+    
+    
     public void add(AccountDTO acc){
         try{
             String qry = "insert into Account values('"
@@ -126,6 +137,8 @@ public class AccountDAO {
         catch(SQLException e){
         }
     }
+    
+    
     public void edit(AccountDTO acc){
         try{
             String qry = "update Account set"
@@ -144,6 +157,8 @@ public class AccountDAO {
         catch(SQLException e){
         }
     }
+    
+    
     public void delete(String id){
         try{
             String qry = "Delete from Account where userID = '"+id+"'";
@@ -152,7 +167,7 @@ public class AccountDAO {
             if (rowAffected == 1){
                 JOptionPane.showMessageDialog(null, "Xóa thành công");
             }
-            else JOptionPane.showMessageDialog(null, "Xóa không thành công");
+//            else JOptionPane.showMessageDialog(null, "Xóa không thành công");
         }
         catch(SQLException e){
         }

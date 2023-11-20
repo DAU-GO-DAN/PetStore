@@ -226,7 +226,6 @@ public class ProductUI extends javax.swing.JPanel {
         jLabel1.setText("Bộ lọc : ");
 
         cbbFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        cbbFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbbFilter.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbbFilterItemStateChanged(evt);
@@ -520,6 +519,7 @@ public class ProductUI extends javax.swing.JPanel {
     public void loadFilter()
     {
         cbbFilter.removeAllItems();
+        cbbFilter.addItem("Tất cả");
         if(section.equals("petonstore") || section.equals("soldpet"))
         {
             for(BreedDTO bre : breed.breedList)
