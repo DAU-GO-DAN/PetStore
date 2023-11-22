@@ -36,7 +36,7 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
     PetOnStoreDTO pet;
     BreedBUS breed = new BreedBUS();
     SupplierTempBUS supplier = new SupplierTempBUS();
-    PetOnStoreBUS petBus = new PetOnStoreBUS();
+
     Validator valid = new Validator();
     private String supName;
     public PetOnStoreDetail(PetOnStoreDTO pet, ProductUI ui, ProductCom com) {
@@ -108,6 +108,7 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel5.setText("Giá bán");
 
+        tfSoldPrice.setEditable(false);
         tfSoldPrice.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfSoldPrice.setText("1.000.000.000");
 
@@ -446,10 +447,12 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
         }
         
         
-        petBus.edit(pet);
+        ui.POSBus.edit(pet);
         loadInfo();
+        
 //        ui.refreshTable();
         com.refreshInfo();
+        JOptionPane.showMessageDialog(null, "Lưu thành công");
         
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -505,7 +508,7 @@ public class PetOnStoreDetail extends javax.swing.JFrame {
         
         int result = JOptionPane.showConfirmDialog(null, "Bạn có muốn xóa ?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if( result == JOptionPane.YES_OPTION){
-            petBus.delete(pet.getId());
+            ui.POSBus.delete(pet.getId());
             this.dispose();
             ui.refreshTable();
         }

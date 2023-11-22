@@ -10,6 +10,7 @@ import com.dao.SoldPetDTO;
 import com.dao.ProductDTO;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.io.File;
 import javax.swing.ImageIcon;
 
 /**
@@ -140,20 +141,35 @@ public class ProductCom extends javax.swing.JPanel {
     
     public void setImage()
     {
+        String imageUrl = product.getImageUrl();
         if(product.getImageUrl().equals("null"))
         {
             lbImage.setText("Chưa có ảnh");
+            lbImage.setIcon(null);
         }
+        
         else{
-            lbImage.setText("");
-            int labelWidth = 347;
-            int labelHeight = 176;
-            String imageUrl = product.getImageUrl();
-            ImageIcon imageIcon = new ImageIcon("src/com/image/" + imageUrl);
-            Image image = imageIcon.getImage();
-            Image newImage = image.getScaledInstance(labelWidth, labelHeight, Image.SCALE_SMOOTH);
-            ImageIcon newImageIcon = new ImageIcon(newImage);
-            lbImage.setIcon(newImageIcon);
+            
+            
+            File imageFile = new File("src/com/image/" + imageUrl);
+            
+            if (imageFile.exists() && imageFile.isFile()) 
+            {
+                lbImage.setText("");  // Ẩn văn bản nếu có ảnh
+                int labelWidth = 347;
+                int labelHeight = 176;
+
+                ImageIcon imageIcon = new ImageIcon(imageFile.getPath());
+                Image image = imageIcon.getImage();
+                Image newImage = image.getScaledInstance(labelWidth, labelHeight, Image.SCALE_SMOOTH);
+                ImageIcon newImageIcon = new ImageIcon(newImage);
+                lbImage.setIcon(newImageIcon);
+            } 
+            else 
+            {
+                lbImage.setText("Không tìm thấy ảnh");
+                lbImage.setIcon(null);  // Đặt icon về null nếu không có ảnh
+            }
         }
     }
     

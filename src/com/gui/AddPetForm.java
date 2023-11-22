@@ -40,11 +40,12 @@ public class AddPetForm extends javax.swing.JFrame {
     private Long importPrice;
     private Long soldPrice;
     Validator valid = new Validator();
-    PetOnStoreBUS petBus = new PetOnStoreBUS();
-    String id = petBus.generateID();
+    
+    String id = "";
 
     public AddPetForm(ProductUI ui) {
         this.ui = ui;
+        this.id = this.ui.POSBus.generateID();
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -120,8 +121,10 @@ public class AddPetForm extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setText("Giá nhập");
 
+        tfImportPrice.setEditable(false);
         tfImportPrice.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
+        tfSoldPrice.setEditable(false);
         tfSoldPrice.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -130,6 +133,7 @@ public class AddPetForm extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel6.setText("Giới Tính");
 
+        tfBreed.setEditable(false);
         tfBreed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -154,6 +158,11 @@ public class AddPetForm extends javax.swing.JFrame {
         tfWeight.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 tfWeightFocusLost(evt);
+            }
+        });
+        tfWeight.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfWeightKeyPressed(evt);
             }
         });
 
@@ -463,7 +472,7 @@ public class AddPetForm extends javax.swing.JFrame {
 //            System.out.println("image : "+pet.getImageUrl());
             
             //chỉnh lại 
-            petBus.add(pet);
+            ui.POSBus.add(pet);
             ui.refreshTable();
             JOptionPane.showMessageDialog(null, "thêm thú cưng thành công");
             this.dispose();
@@ -565,12 +574,18 @@ public class AddPetForm extends javax.swing.JFrame {
         {
             lbWeightWarn.setText("Vui lòng nhập đúng dữ liệu");
         }
+        
     }//GEN-LAST:event_tfWeightFocusLost
 
     private void tfNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNameKeyPressed
         // TODO add your handling code here:
         lbNameWarn.setText("");
     }//GEN-LAST:event_tfNameKeyPressed
+
+    private void tfWeightKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfWeightKeyPressed
+        // TODO add your handling code here:
+        lbWeightWarn.setText("");
+    }//GEN-LAST:event_tfWeightKeyPressed
 
     public void setBreed(String text)
     {

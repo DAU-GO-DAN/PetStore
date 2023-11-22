@@ -30,7 +30,7 @@ public class AnalysisPanel extends javax.swing.JPanel {
     int year = 0;
     String productChoose = "";
     String category = "";
-    String flag = "pet";
+    String flag = "all";
     BreedBUS breBus = new BreedBUS();
     PetProductTypeBUS typeBus = new PetProductTypeBUS();
     ArrayList<MonthItem> monthPaneList = new ArrayList<>();
@@ -191,8 +191,8 @@ public class AnalysisPanel extends javax.swing.JPanel {
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
         // TODO add your handling code here:
         year = Integer.parseInt(cbbYear.getSelectedItem().toString());
-        category = cbbCategoryChoose.getSelectedItem().toString();
         
+        System.out.println("flag cua nut tim trong anaylysis panel :"+ flag);
         //reset info
         for(MonthItem item : monthPaneList)
         {
@@ -200,20 +200,12 @@ public class AnalysisPanel extends javax.swing.JPanel {
             item.setYear(year);
         }
         
+        //bỏ qua phần category
         if(flag.equalsIgnoreCase("all"))
         {
-            
-        }
-        
-        else if(flag.equalsIgnoreCase("pet"))
-        {
-            
-            String breName = cbbCategoryChoose.getSelectedItem().toString();
-            String breID = breBus.getID(cbbCategoryChoose.getSelectedItem().toString());
             for(BreedAnalysisDTO bre : breAnalysisBus.analysisList)
             {
-                if(bre.getYear() == year && 
-                        bre.getBreedID().equalsIgnoreCase(breID))
+                if(bre.getYear() == year)
                 {
                     for(MonthItem item : monthPaneList)
                     {
@@ -222,24 +214,17 @@ public class AnalysisPanel extends javax.swing.JPanel {
                             item.setFlag(flag);
                             item.setSoldQuantity(bre.getSoldQuantity());
                             item.setRevenue(bre.getProfit());
-                            item.setCategory(breID);
+                            item.setCategory("all");
 //                            item.setInfo();
                         }
                     }
-                    
                 }
             }
-        }
-        else if(flag.equalsIgnoreCase("product"))
-        {
-            String categoryID = typeBus.getID(cbbCategoryChoose.getSelectedItem().toString());
+            
             for(MonthlyAnalysisDTO monthTemp : proAnalysisBus.analysisList)
             {
-                if(monthTemp.getYear() == year && 
-                        monthTemp.getTypeID().equalsIgnoreCase(categoryID))
+                if(monthTemp.getYear() == year)
                 {
-//                    System.out.println("year : "+monthTemp.getYear());
-//                    System.out.println("list's month :"+monthTemp.getMonth());
                     for(MonthItem item : monthPaneList)
                     {  
 //                        System.out.println("pane month :" +item.month);
@@ -250,12 +235,131 @@ public class AnalysisPanel extends javax.swing.JPanel {
                             item.setFlag(flag);
                             item.setSoldQuantity(monthTemp.getSoldQuantity());
                             item.setRevenue(monthTemp.getProfit());
-                            item.setCategory(categoryID);
+                            item.setCategory("all");
 //                            item.setInfo();
                         }
                     }
                 }
             }
+        }
+        
+        //pet
+        else if(flag.equalsIgnoreCase("pet"))
+        {
+            category = cbbCategoryChoose.getSelectedItem().toString();
+            String breName = cbbCategoryChoose.getSelectedItem().toString();
+            String breID = breBus.getID(cbbCategoryChoose.getSelectedItem().toString());
+            
+            //nếu lựa chọn giống loài là tất cả
+            if(category.equalsIgnoreCase("tất cả"))
+            {
+                for(BreedAnalysisDTO bre : breAnalysisBus.analysisList)
+                {
+                    if(bre.getYear() == year)
+                    {
+                        for(MonthItem item : monthPaneList)
+                        {
+                            if(bre.getMonth() == item.month)
+                            {
+                                item.setFlag(flag);
+                                item.setSoldQuantity(bre.getSoldQuantity());
+                                item.setRevenue(bre.getProfit());
+                                item.setCategory("all");
+    //                            item.setInfo();
+                            }
+                        }
+
+                    }
+                }
+            }
+            
+            //hoặc có chọn 1 giống loài cụ thể
+            else{
+                for(BreedAnalysisDTO bre : breAnalysisBus.analysisList)
+                {
+                    if(bre.getYear() == year && 
+                            bre.getBreedID().equalsIgnoreCase(breID))
+                    {
+                        for(MonthItem item : monthPaneList)
+                        {
+                            if(bre.getMonth() == item.month)
+                            {
+                                item.setFlag(flag);
+                                item.setSoldQuantity(bre.getSoldQuantity());
+                                item.setRevenue(bre.getProfit());
+                                item.setCategory(breID);
+    //                            item.setInfo();
+                            }
+                        }
+
+                    }
+                }
+            }
+            
+            
+        }
+        
+        //pet product
+        else if(flag.equalsIgnoreCase("product"))
+        {
+            category = cbbCategoryChoose.getSelectedItem().toString();
+            String categoryID = typeBus.getID(cbbCategoryChoose.getSelectedItem().toString());
+            
+            //nếu loại sp chọn là tất cả
+            if(category.equalsIgnoreCase("tất cả"))
+            {
+                for(MonthlyAnalysisDTO monthTemp : proAnalysisBus.analysisList)
+                {
+                    if(monthTemp.getYear() == year)
+                    {
+    //                    System.out.println("year : "+monthTemp.getYear());
+    //                    System.out.println("list's month :"+monthTemp.getMonth());
+                        for(MonthItem item : monthPaneList)
+                        {  
+    //                        System.out.println("pane month :" +item.month);
+                            if(item.month == monthTemp.getMonth())
+                            {
+    //                            System.out.println("tim thay :" +monthTemp.getMonth());
+    //                            System.out.println("month "+monthTemp.getMonth());
+                                item.setFlag(flag);
+                                item.setSoldQuantity(monthTemp.getSoldQuantity());
+                                item.setRevenue(monthTemp.getProfit());
+                                item.setCategory("all");
+    //                            item.setInfo();
+                            }
+                        }
+                    }
+                }
+            }
+            
+            //hoặc có chọn 1 loại sản phẩm cụ thể
+            else{
+                for(MonthlyAnalysisDTO monthTemp : proAnalysisBus.analysisList)
+                {
+                    if(monthTemp.getYear() == year && 
+                            monthTemp.getTypeID().equalsIgnoreCase(categoryID))
+                    {
+    //                    System.out.println("year : "+monthTemp.getYear());
+    //                    System.out.println("list's month :"+monthTemp.getMonth());
+                        for(MonthItem item : monthPaneList)
+                        {  
+    //                        System.out.println("pane month :" +item.month);
+                            if(item.month == monthTemp.getMonth())
+                            {
+    //                            System.out.println("tim thay :" +monthTemp.getMonth());
+    //                            System.out.println("month "+monthTemp.getMonth());
+                                item.setFlag(flag);
+                                item.setSoldQuantity(monthTemp.getSoldQuantity());
+                                item.setRevenue(monthTemp.getProfit());
+                                item.setCategory(categoryID);
+    //                            item.setInfo();
+                            }
+                        }
+                    }
+                }
+            }
+            
+            
         }
     }//GEN-LAST:event_btnFindActionPerformed
 
@@ -265,7 +369,7 @@ public class AnalysisPanel extends javax.swing.JPanel {
         cbbCategoryChoose.removeAllItems();
         if(productChoose.equalsIgnoreCase("tất cả"))
         {
-            cbbCategoryChoose.addItem("Tất cả");
+            
             flag = "all";
         }
         else if(productChoose.equalsIgnoreCase("Thú"))
@@ -299,7 +403,8 @@ public class AnalysisPanel extends javax.swing.JPanel {
     public void loadCbbCategoryDefault()
     {
         
-                cbbCategoryChoose.addItem("Tất cả");
+                cbbCategoryChoose.removeAllItems();
+                
             
     }
     

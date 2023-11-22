@@ -49,10 +49,11 @@ public class AddInvoice extends javax.swing.JFrame {
     ArrayList<ProductDTO> productList = new ArrayList<>();
     ArrayList<ProductDTO> addedList = new ArrayList<>();
     ArrayList<AddedInvoiceItem> addedPanelItemList = new ArrayList<>();
-    
-    public AddInvoice(String empID, String empName) {
+    InvoiceGUI invGui;
+    public AddInvoice(String empID, String empName, InvoiceGUI invGui) {
         this.empID = empID;
         this.empName = empName;
+        this.invGui = invGui;
 //        System.out.println("name :" +this.empName);
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -565,6 +566,7 @@ public class AddInvoice extends javax.swing.JFrame {
             InvoiceDetail invForm = new InvoiceDetail(newInvoice);
             invForm.setVisible(true);
             this.dispose();
+            invGui.refreshTable();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

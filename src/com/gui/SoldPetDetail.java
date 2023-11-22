@@ -77,15 +77,18 @@ public class SoldPetDetail extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel5.setText("Giá bán");
 
+        tfSoldPrice.setEditable(false);
         tfSoldPrice.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfSoldPrice.setText("1.000.000.000");
 
+        tfImportPrice.setEditable(false);
         tfImportPrice.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfImportPrice.setText("1.000.000.000");
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("Giá Nhập");
 
+        tfSupplier.setEditable(false);
         tfSupplier.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfSupplier.setText("Pet House");
 
@@ -95,42 +98,49 @@ public class SoldPetDetail extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel7.setText("Giới tính");
 
+        tfGender.setEditable(false);
         tfGender.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfGender.setText("Đực");
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel8.setText("Giống loài");
 
+        tfBreed.setEditable(false);
         tfBreed.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfBreed.setText("Chó Shiba Nhựt Bổn");
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel9.setText("Màu lông");
 
+        tfColor.setEditable(false);
         tfColor.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfColor.setText("Xám trắng nhạt");
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel10.setText("Cân nậng");
 
+        tfWeight.setEditable(false);
         tfWeight.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfWeight.setText("Rất là nặng(100 kg)");
 
         jLabel11.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel11.setText("Khách hàng");
 
+        tfCustomer.setEditable(false);
         tfCustomer.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfCustomer.setText("Nguyen Văn Đú");
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel12.setText("Ngày bán");
 
+        tfDate.setEditable(false);
         tfDate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfDate.setText("11/9");
 
         jLabel13.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel13.setText("Thông tin mô tả");
 
+        tfDescription.setEditable(false);
         tfDescription.setColumns(20);
         tfDescription.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfDescription.setRows(5);
@@ -148,6 +158,7 @@ public class SoldPetDetail extends javax.swing.JFrame {
         jLabel15.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel15.setText("Ngày nhập");
 
+        tfImportDate.setEditable(false);
         tfImportDate.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfImportDate.setText("11/9");
 

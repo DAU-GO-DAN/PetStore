@@ -25,7 +25,7 @@ public class InvoiceGUI extends javax.swing.JPanel {
     String empName, empID;
     InvoiceBUS InvBUS= new InvoiceBUS();
     Validator valid = new Validator();
-    public InvoiceGUI(String empName, String empID) {
+    public InvoiceGUI(String empID, String empName) {
         this.empID = empID;
         this.empName = empName;
         initComponents();
@@ -152,6 +152,8 @@ public class InvoiceGUI extends javax.swing.JPanel {
         jLabel1.setForeground(new java.awt.Color(255, 102, 0));
         jLabel1.setText("QUẢN LÝ HÓA ĐƠN");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, 368, -1));
+        InvBUS.readData();
+        Table.setModel(InvBUS.getModel());
 
         svgImage1.setText("svgImage1");
         svgImage1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -247,11 +249,15 @@ if (value != null) {
 
     private void AddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddMouseClicked
         // TODO add your handling code here:
-        AddInvoice add = new AddInvoice(empID, empName);
+        AddInvoice add = new AddInvoice(empID, empName, this);
         add.setVisible(true);
     }//GEN-LAST:event_AddMouseClicked
 
-    
+    public void refreshTable()
+    {
+        InvBUS.readData();
+        Table.setModel(InvBUS.getModel());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.gui.SvgImage Add;

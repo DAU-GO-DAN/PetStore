@@ -92,6 +92,7 @@ public class PetProductDetail extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("Giá Nhập");
 
+        tfImportPrice.setEditable(false);
         tfImportPrice.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfImportPrice.setText("1.000.000.000");
 
@@ -102,6 +103,7 @@ public class PetProductDetail extends javax.swing.JFrame {
             }
         });
 
+        tfSoldPrice.setEditable(false);
         tfSoldPrice.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         tfSoldPrice.setText("1.000.000.000");
 

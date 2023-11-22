@@ -24,6 +24,7 @@ import javax.swing.table.DefaultTableModel;
 public class ImportDetailGUI extends javax.swing.JFrame {
     private ArrayList<ImportDetailDTO> impDetList = new ArrayList<>();
     private ImportDTO impDTO;
+    EmployeeBUS empBUS= new EmployeeBUS();
     Validator valid = new Validator();
 
     /**
@@ -50,10 +51,10 @@ public class ImportDetailGUI extends javax.swing.JFrame {
         lbImpID.setText("Mã phiếu nhập: "+impDTO.getImportID());
         lbDate.setText(valid.toUIDate(impDTO.getCreatedDate()));
             
-         EmployeeBUS empBUS= new EmployeeBUS();
+         
          empBUS.readData();
-         EmployeeDTO empDTO = empBUS.searchByID(impDTO.getEmployeeID());
-         lbEmpName.setText("Tên nhân viên: "+empDTO.getName());
+
+         lbEmpName.setText("Tên nhân viên: "+empBUS.getName(impDTO.getEmployeeID()));
          
          lbTotalQuantity.setText("Tổng: " + totalQuantity());
          lbTotalAmount.setText("Thành tiền: " + totalAmount());

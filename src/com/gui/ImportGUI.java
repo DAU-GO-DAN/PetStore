@@ -40,7 +40,7 @@ public class ImportGUI extends javax.swing.JPanel {
         btnRefresh.setSVGImage("com/image/reload.svg", 30, 30);
         btnSearch.setSVGImage("com/image/search.svg", 30, 30);
         svgImportLogo.setSVGImage("com/image/import.svg", 70, 70);
-        
+        btnXem.setSVGImage("com/image/view.svg", 30, 30);
         ImportBUS impBUS = new ImportBUS();
         impList =impBUS.getList();
          addRowtoImportTable(impList);

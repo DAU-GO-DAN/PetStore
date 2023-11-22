@@ -5,6 +5,7 @@
 package com.gui;
 
 import com.bus.MonthlyAnalysisBUS;
+import com.bus.PetProductBUS;
 import com.bus.SoldPetBUS;
 import com.dao.BreedAnalysisDTO;
 import com.dao.MonthlyAnalysisDTO;
@@ -106,13 +107,16 @@ public class MonthItem extends javax.swing.JPanel {
 
     private void btnSoldListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSoldListActionPerformed
         // TODO add your handling code here:
-        
+        ArrayList<SoldList> soldList = new ArrayList<>();
         //tìm tất cả
+        System.out.println("flag cua month item : "+flag);
         if(flag.equalsIgnoreCase("all"))
         {
+            PetProductBUS proBus = new PetProductBUS();
+            soldList.removeAll(soldList);
             SoldPetBUS soldPetBus = new SoldPetBUS();
             MonthlyAnalysisBUS monthAnalysisBus = new MonthlyAnalysisBUS();
-            ArrayList<SoldList> soldList = new ArrayList<>();
+            
             for(SoldPetDTO soldPetTemp : soldPetBus.soldList)
             {
                 if(soldPetTemp.getSoldDate().getMonthValue() == month && 
@@ -125,65 +129,112 @@ public class MonthItem extends javax.swing.JPanel {
                 }
             }
             
+            //làm tên
             for(MonthlyAnalysisDTO monthSoldTemp : monthAnalysisBus.analysisList)
             {
                 if(monthSoldTemp.getMonth() == month && 
                         monthSoldTemp.getYear() == year)
                 {
                     SoldList soldItem = new SoldList();
-                    soldItem.setName(monthSoldTemp.getProductID());
+                    soldItem.setName(proBus.getName(monthSoldTemp.getProductID()));
                     soldItem.setQuantity(monthSoldTemp.getSoldQuantity());
                     soldList.add(soldItem);
                 }
             }
-            SoldListUI listUI = new SoldListUI(soldList, flag);
-            listUI.setVisible(true);
+            System.out.println("size : "+soldList.size());
+            
         }        
         
         //tìm thú
         else if(flag.equalsIgnoreCase("pet"))
         {
+            soldList.removeAll(soldList);
             SoldPetBUS soldPetBus = new SoldPetBUS();
-            ArrayList<SoldList> soldList = new ArrayList<>();
-            for(SoldPetDTO soldPetTemp : soldPetBus.soldList)
+            
+            //nếu chọn giống loài là tất cả
+            if(category.equalsIgnoreCase("all"))
             {
-                if(soldPetTemp.getBreedId().equalsIgnoreCase(category) &&  
-                        soldPetTemp.getSoldDate().getMonthValue() == month && 
-                        soldPetTemp.getSoldDate().getYear() == year)
+                for(SoldPetDTO soldPetTemp : soldPetBus.soldList)
                 {
-                    SoldList soldItem = new SoldList();
-                    soldItem.setName(soldPetTemp.getName());
-                    soldItem.setQuantity(1);
-                    soldList.add(soldItem);
+                    if(soldPetTemp.getSoldDate().getMonthValue() == month && 
+                            soldPetTemp.getSoldDate().getYear() == year)
+                    {
+                        SoldList soldItem = new SoldList();
+                        soldItem.setName(soldPetTemp.getName());
+                        soldItem.setQuantity(1);
+                        soldList.add(soldItem);
+                    }
                 }
             }
-            SoldListUI listUI = new SoldListUI(soldList, flag);
-            listUI.setVisible(true);
+            
+            //hoặc chọn 1 giống loài cụ thể
+            else{
+                for(SoldPetDTO soldPetTemp : soldPetBus.soldList)
+                {
+                    if(soldPetTemp.getBreedId().equalsIgnoreCase(category) &&  
+                            soldPetTemp.getSoldDate().getMonthValue() == month && 
+                            soldPetTemp.getSoldDate().getYear() == year)
+                    {
+                        SoldList soldItem = new SoldList();
+                        soldItem.setName(soldPetTemp.getName());
+                        soldItem.setQuantity(1);
+                        soldList.add(soldItem);
+                    }
+                }
+            }
+            
+            
+            
+            System.out.println("size : "+soldList.size());
         }
         
         
         //tìm sản phảm cho thú
+        //làm tên 
         else if(flag.equalsIgnoreCase("product"))
         {
+            soldList.removeAll(soldList);
             MonthlyAnalysisBUS monthAnalysisBus = new MonthlyAnalysisBUS();
-            ArrayList<SoldList> soldList = new ArrayList<>();
-            for(MonthlyAnalysisDTO monthSoldTemp : monthAnalysisBus.analysisList)
+            PetProductBUS proBus = new PetProductBUS();
+            
+            //nếu chọn 1 loại là tất cả
+            if(category.equalsIgnoreCase("all"))
             {
-                if(monthSoldTemp.getTypeID().equalsIgnoreCase(category) && 
-                        monthSoldTemp.getMonth() == month && 
-                        monthSoldTemp.getYear() == year)
+                for(MonthlyAnalysisDTO monthSoldTemp : monthAnalysisBus.analysisList)
                 {
-                    SoldList soldItem = new SoldList();
-                    soldItem.setName(monthSoldTemp.getProductID());
-                    soldItem.setQuantity(monthSoldTemp.getSoldQuantity());
-                    soldList.add(soldItem);
+                    if(monthSoldTemp.getMonth() == month && 
+                            monthSoldTemp.getYear() == year)
+                    {
+                        SoldList soldItem = new SoldList();
+                        soldItem.setName(proBus.getName(monthSoldTemp.getProductID()));
+                        soldItem.setQuantity(monthSoldTemp.getSoldQuantity());
+                        soldList.add(soldItem);
+                    }
                 }
             }
-            SoldListUI listUI = new SoldListUI(soldList, flag);
-            listUI.setVisible(true);
+            
+            //nếu chọn 1 loại sp cụ thể
+            else{
+                for(MonthlyAnalysisDTO monthSoldTemp : monthAnalysisBus.analysisList)
+                {
+                    if(monthSoldTemp.getTypeID().equalsIgnoreCase(category) && 
+                            monthSoldTemp.getMonth() == month && 
+                            monthSoldTemp.getYear() == year)
+                    {
+                        SoldList soldItem = new SoldList();
+                        soldItem.setName(proBus.getName(monthSoldTemp.getProductID()));
+                        soldItem.setQuantity(monthSoldTemp.getSoldQuantity());
+                        soldList.add(soldItem);
+                    }
+                }
+            }
+            
+            
+            
+            System.out.println("size : "+soldList.size());
         }
-//        SoldListUI soldListUI = new SoldListUI();
-//        soldListUI.setVisible(true);
+        SoldListUI soldListUI = new SoldListUI(soldList, flag);
+        soldListUI.setVisible(true);
     }//GEN-LAST:event_btnSoldListActionPerformed
 
     public void setCategory(String category)
@@ -191,9 +242,9 @@ public class MonthItem extends javax.swing.JPanel {
         this.category = category;
     }
     
-    public void setFlag(String flag)
+    public void setFlag(String flagTemp)
     {
-        this.flag = flag;
+        this.flag = flagTemp;
     }
     
     public void resetInfo()

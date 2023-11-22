@@ -45,25 +45,30 @@ public class ProductUI extends javax.swing.JPanel {
     /**
      * Creates new form ProductCom
      */
-    PetOnStoreBUS POSBus = new PetOnStoreBUS();
-    ArrayList<PetOnStoreDTO> petOnStoreList = new ArrayList<>();
+    Validator valid = new Validator();
     
-    PetProductBUS PetProBus = new PetProductBUS();
-    ArrayList<PetProductDTO> proList = new ArrayList<>();
+    public PetOnStoreBUS POSBus = new PetOnStoreBUS();
     
-    SoldPetBUS soldBus = new SoldPetBUS();
-    ArrayList<SoldPetDTO> soldList = new ArrayList<>();
+    ArrayList<PetOnStoreDTO> petOnStoreFindList = new ArrayList<>();
     
+    public PetProductBUS PetProBus = new PetProductBUS();
+    
+    ArrayList<PetProductDTO> proFindList = new ArrayList<>();
+    
+    public SoldPetBUS soldBus = new SoldPetBUS();
+
+    ArrayList<SoldPetDTO> soldFindList = new ArrayList<>();
     
     
     BreedBUS breed = new BreedBUS();
     PetProductTypeBUS typeBus = new PetProductTypeBUS();
     int hgap = 5;
     int vgap = 5;
-    String section = "";
-    String searchOption = "";
+    String section = "petonstore";
+    String searchOption = "all";
     public ProductUI() {
         initComponents();
+        btnDateFilter.setVisible(false);
         setSize(new Dimension(1280, 620));
 //        svgAdd.setSVGImage("com/image/add.svg", 32, 32);
         Table.removeAll();
@@ -98,6 +103,7 @@ public class ProductUI extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         cbbFilter = new javax.swing.JComboBox<>();
         btnFilter = new javax.swing.JButton();
+        btnDateFilter = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(167, 210, 203));
         setName(""); // NOI18N
@@ -245,6 +251,14 @@ public class ProductUI extends javax.swing.JPanel {
             }
         });
 
+        btnDateFilter.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnDateFilter.setText("Lọc theo ngày bán");
+        btnDateFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDateFilterActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -263,7 +277,9 @@ public class ProductUI extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbbFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnFilter)
+                        .addComponent(btnFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btnDateFilter)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(svgAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 13, Short.MAX_VALUE))
@@ -283,7 +299,8 @@ public class ProductUI extends javax.swing.JPanel {
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cbbFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnFilter)))
+                        .addComponent(btnFilter)
+                        .addComponent(btnDateFilter)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(BaseTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(16, Short.MAX_VALUE))
@@ -318,6 +335,7 @@ public class ProductUI extends javax.swing.JPanel {
         svgAdd.setSVGImage("com/image/add.svg", 32, 32);
         section = "petonstore";
         loadFilter();
+        btnDateFilter.setVisible(false);
     }//GEN-LAST:event_lbPetOnStoreMouseClicked
 
     private void lbPetProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbPetProductMouseClicked
@@ -327,6 +345,7 @@ public class ProductUI extends javax.swing.JPanel {
         svgAdd.setSVGImage("com/image/add.svg", 32, 32);
         section = "petproduct";
         loadFilter();
+        btnDateFilter.setVisible(false);
     }//GEN-LAST:event_lbPetProductMouseClicked
 
     private void lbSoldPetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbSoldPetMouseClicked
@@ -335,6 +354,7 @@ public class ProductUI extends javax.swing.JPanel {
         svgAdd.setIcon(null);
         section = "soldpet";
         loadFilter();
+        btnDateFilter.setVisible(false);
     }//GEN-LAST:event_lbSoldPetMouseClicked
 
     private void cbbFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbFilterActionPerformed
@@ -352,16 +372,183 @@ public class ProductUI extends javax.swing.JPanel {
 
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
         // TODO add your handling code here:
-        if(!section.equals(""))
+        
+        //sử dụng search option để khoang vùng
+        String option = cbbFilter.getSelectedItem().toString();
+        
+        //thú đang bán
+        if(section.equals("petonstore"))
         {
+            //xóa hết dữ liệu tìm trước đó
+            petOnStoreFindList.removeAll(petOnStoreFindList);
+            if(option.equalsIgnoreCase("tất cả"))
+            {
+                refreshTable();
+            }
+            else
+            {
+                for(PetOnStoreDTO petTemp : POSBus.petList)
+                {
+                    if(petTemp.getBreedId().equalsIgnoreCase(breed.getID(option)))
+                    {
+                        petOnStoreFindList.add(petTemp);
+                    }
+                }
+                refreshPetFindTable(petOnStoreFindList);
+            }
+        }
+        
+        //sản phẩm
+        else if(section.equals("petproduct"))
+        {
+            Table.removeAll();
             
+            //xóa hết dữ liệu tìm trước đó
+            proFindList.removeAll(proFindList);
+            if(option.equalsIgnoreCase("tất cả"))
+            {
+                refreshPetProList();
+            }
+            else
+            {
+                for(PetProductDTO proTemp : PetProBus.productList)
+                {
+                    if(proTemp.getCategoryID().equalsIgnoreCase(typeBus.getID(option)))
+                    {
+                        proFindList.add(proTemp);
+                    }
+                }
+                refreshProductFind(proFindList);
+            }
+        }
+        
+        //thú đã bán
+        else if(section.equals("soldpet"))
+        {
+            Table.removeAll();
+            
+            //xóa hết dữ liệu tìm trước đó
+            soldFindList.removeAll(soldFindList);
+            if(option.equalsIgnoreCase("tất cả"))
+            {
+                soldPetTable();
+            }
+            else
+            {
+                for(SoldPetDTO petTemp : soldBus.soldList)
+                {
+                    if(petTemp.getBreedId().equalsIgnoreCase(breed.getID(option)))
+                    {
+                        soldFindList.add(petTemp);
+                    }
+                }
+                refreshSoldPetFind(soldFindList);
+            }
         }
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void tfSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyPressed
         // TODO add your handling code here:
         
+        //lấy search option để tìm
+        //
+        String option = cbbFilter.getSelectedItem().toString();
+        String searchText = tfSearch.getText();
+        if(section.equalsIgnoreCase("petonstore"))
+        {
+            petOnStoreFindList.removeAll(petOnStoreFindList);
+            if(option.equalsIgnoreCase("tất cả"))
+            {
+                for(PetOnStoreDTO petTemp : POSBus.petList)
+                {
+                    if( ( valid.normalizeString(petTemp.getName()).toLowerCase().contains(valid.normalizeString(searchText).toLowerCase() ) || 
+                        petTemp.getId().toLowerCase().contains(searchText.toLowerCase()) ) )
+                    {
+                        petOnStoreFindList.add(petTemp);
+                    }
+                }
+            }
+            
+            else{
+                String breIDTemp = breed.getID(option);
+                for(PetOnStoreDTO petTemp : POSBus.petList)
+                {
+                    if( ( valid.normalizeString(petTemp.getName()).toLowerCase().contains(valid.normalizeString(searchText).toLowerCase()) || 
+                            petTemp.getId().equalsIgnoreCase(searchText) ) && 
+                            petTemp.getBreedId().equalsIgnoreCase(breIDTemp))
+                    {
+                        petOnStoreFindList.add(petTemp);
+                    }
+                }
+            }
+
+            refreshPetFindTable(petOnStoreFindList);
+        }
+        else if(section.equalsIgnoreCase("petproduct"))
+        {
+            proFindList.removeAll(proFindList);
+            if(option.equalsIgnoreCase("tất cả"))
+            {
+                for(PetProductDTO proTemp : PetProBus.productList)
+                {
+                    if( valid.normalizeString(proTemp.getName()).toLowerCase().contains(valid.normalizeString(searchText).toLowerCase()) || 
+                            proTemp.getId().toLowerCase().contains(searchText.toLowerCase()) )
+                    {
+                        proFindList.add(proTemp);
+                    }
+                }
+            }
+            
+            else
+            {
+                String typeIDTemp = typeBus.getID(option);
+                for(PetProductDTO proTemp : PetProBus.productList)
+                {
+                    if( ( valid.normalizeString(proTemp.getName()).toLowerCase().contains(valid.normalizeString(searchText).toLowerCase()) || 
+                            proTemp.getId().toLowerCase().contains(searchText.toLowerCase()) ) && 
+                            proTemp.getCategoryID().equalsIgnoreCase(typeIDTemp))
+                    {
+                        proFindList.add(proTemp);
+                    }
+                }
+            }
+            refreshProductFind(proFindList);
+        }
+        else if(section.equalsIgnoreCase("soldpet"))
+        {
+            soldFindList.removeAll(soldFindList);
+            if(option.equalsIgnoreCase("tất cả"))
+            {
+                for(SoldPetDTO petTemp : soldBus.soldList)
+                {
+                    if( ( valid.normalizeString(petTemp.getName()).toLowerCase().contains(valid.normalizeString(searchText).toLowerCase() ) || 
+                        petTemp.getId().toLowerCase().contains(searchText.toLowerCase()) ) )
+                    {
+                        soldFindList.add(petTemp);
+                    }
+                }
+            }
+            
+            else 
+            {
+                String breIDTemp = breed.getID(option);
+                for(SoldPetDTO petTemp : soldBus.soldList)
+                {
+                    if( ( valid.normalizeString(petTemp.getName()).toLowerCase().contains(valid.normalizeString(searchText).toLowerCase()) || 
+                            petTemp.getId().equalsIgnoreCase(searchText) ) && 
+                            petTemp.getBreedId().equalsIgnoreCase(breIDTemp))
+                    {
+                        soldFindList.add(petTemp);
+                    }
+                }
+            }
+            refreshSoldPetFind(soldFindList);
+        }
     }//GEN-LAST:event_tfSearchKeyPressed
+
+    private void btnDateFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDateFilterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDateFilterActionPerformed
 
     public void revalidateTable()
     {
@@ -370,43 +557,83 @@ public class ProductUI extends javax.swing.JPanel {
         Table.repaint();
     }
     
-    public void refreshTable()
+    public void refreshPetFindTable(ArrayList<PetOnStoreDTO> list)   
     {
         revalidateTable();
         
-        
-        POSBus.readData();
-        petOnStoreList = POSBus.petList;
-        
-        if(petOnStoreList.size() <= 6)
+        if(list.size() <= 6)
         {
-           Table.setLayout(new GridLayout(2, 3, hgap, vgap));
-            for(PetOnStoreDTO pet : petOnStoreList)
+            Table.setLayout(new GridLayout(2, 3, hgap, vgap));
+            for(PetOnStoreDTO pet : list)
             {
                 ProductCom product = new ProductCom(pet, this);
                 Table.add(product);
             }
-            int remains = 6 - petOnStoreList.size();
+            int remains = 6 - list.size();
             for(int i = 0; i < remains; i++)
             {
                 EmptyProduct emp = new EmptyProduct();
                 Table.add(emp);
             }
         }
-        else if(petOnStoreList.size() > 6)
+        else if(list.size() > 6)
         {
             int rows = 0;
-            int remains = petOnStoreList.size() % 3;
+            int remains = list.size() % 3;
             if(remains != 0)
             {
-                rows = (petOnStoreList.size() / 3) + 1;
+                rows = (list.size() / 3) + 1;
             }
             else{
-                rows = (petOnStoreList.size() / 3);
+                rows = (list.size() / 3);
             }
             Table.setLayout(new GridLayout(rows, 3, hgap, vgap));
             
-            for(PetOnStoreDTO pet : petOnStoreList)
+            for(PetOnStoreDTO pet : list)
+            {
+                ProductCom product = new ProductCom(pet, this);
+                Table.add(product);
+            }
+        }
+    }
+    
+    public void refreshTable()
+    {
+        revalidateTable();
+        
+        
+//        POSBus.readData();
+//        petOnStoreList = POSBus.petList;
+        
+        if(POSBus.petList.size() <= 6)
+        {
+           Table.setLayout(new GridLayout(2, 3, hgap, vgap));
+            for(PetOnStoreDTO pet : POSBus.petList)
+            {
+                ProductCom product = new ProductCom(pet, this);
+                Table.add(product);
+            }
+            int remains = 6 - POSBus.petList.size();
+            for(int i = 0; i < remains; i++)
+            {
+                EmptyProduct emp = new EmptyProduct();
+                Table.add(emp);
+            }
+        }
+        else if(POSBus.petList.size() > 6)
+        {
+            int rows = 0;
+            int remains = POSBus.petList.size() % 3;
+            if(remains != 0)
+            {
+                rows = (POSBus.petList.size() / 3) + 1;
+            }
+            else{
+                rows = (POSBus.petList.size() / 3);
+            }
+            Table.setLayout(new GridLayout(rows, 3, hgap, vgap));
+            
+            for(PetOnStoreDTO pet : POSBus.petList)
             {
                 ProductCom product = new ProductCom(pet, this);
                 Table.add(product);
@@ -415,6 +642,46 @@ public class ProductUI extends javax.swing.JPanel {
         
         Table.revalidate();
         Table.repaint();
+    }
+    
+    public void refreshProductFind(ArrayList<PetProductDTO> list)
+    {
+        revalidateTable();
+        
+        if(list.size() <= 6)
+        {
+            Table.setLayout(new GridLayout(2, 3, hgap, vgap));
+            for(PetProductDTO pet : list)
+            {
+                ProductCom product = new ProductCom(pet, this);
+                Table.add(product);
+            }
+            int remains = 6 - list.size();
+            for(int i = 0; i < remains; i++)
+            {
+                EmptyProduct emp = new EmptyProduct();
+                Table.add(emp);
+            }
+        }
+        else if(list.size() > 6)
+        {
+            int rows = 0;
+            int remains = list.size() % 3;
+            if(remains != 0)
+            {
+                rows = (list.size() / 3) + 1;
+            }
+            else{
+                rows = (list.size() / 3);
+            }
+            Table.setLayout(new GridLayout(rows, 3, hgap, vgap));
+            
+            for(PetProductDTO pet : list)
+            {
+                ProductCom product = new ProductCom(pet, this);
+                Table.add(product);
+            }
+        }
     }
     
     public void refreshPetProList()
@@ -424,44 +691,88 @@ public class ProductUI extends javax.swing.JPanel {
         Table.repaint();
         
         
-        PetProBus.readData();
-        proList = PetProBus.productList;
+//        PetProBus.readData();
+//        proList = PetProBus.productList;
         
 //        System.out.println("int 1:"+testList.size());
 //        System.out.println("int 2: "+PetProBus.productList.size());
         
-        if(proList.size() <= 6)
+        if(PetProBus.productList.size() <= 6)
         {
             Table.setLayout(new GridLayout(2, 3, hgap, vgap));
-            for(PetProductDTO product : proList)
+            for(PetProductDTO product : PetProBus.productList)
             {
                 ProductCom productCom = new ProductCom(product, this);
                 Table.add(productCom);
             }
-            int remains = 6 - proList.size();
+            int remains = 6 - PetProBus.productList.size();
             for(int i = 0; i < remains; i++)
             {
                 EmptyProduct emp = new EmptyProduct();
                 Table.add(emp);
             }
         }
-        else if(proList.size() > 6)
+        else if(PetProBus.productList.size() > 6)
         {
             int rows = 0;
-            int remains = proList.size() % 3;
+            int remains = PetProBus.productList.size() % 3;
             if(remains != 0)
             {
-                rows = (proList.size() / 3) + 1;
+                rows = (PetProBus.productList.size() / 3) + 1;
             }
             else{
-                rows = (proList.size() / 3);
+                rows = (PetProBus.productList.size() / 3);
             }
             Table.setLayout(new GridLayout(rows, 3, hgap, vgap));
             
-            for(PetProductDTO product : proList)
+            for(PetProductDTO product : PetProBus.productList)
             {
                 ProductCom productCom = new ProductCom(product, this);
                 Table.add(productCom);
+            }
+        }
+        Table.revalidate();
+        Table.repaint();
+    }
+    
+    public void refreshSoldPetFind(ArrayList<SoldPetDTO> list)
+    {
+        Table.removeAll();
+        Table.revalidate();
+        Table.repaint();
+        
+        if(list.size() <= 6)
+        {
+            Table.setLayout(new GridLayout(2, 3, hgap, vgap));
+            for(SoldPetDTO pet : list)
+            {
+                ProductCom product = new ProductCom(pet, this);
+                Table.add(product);
+            }
+            int remains = 6 - list.size();
+            for(int i = 0; i < remains; i++)
+            {
+                EmptyProduct emp = new EmptyProduct();
+                Table.add(emp);
+            }
+        }
+        else if(list.size() > 6)
+        {
+            int rows = 0;
+            int remains = list.size() % 3;
+            if(remains != 0)
+            {
+                rows = (list.size() / 3) + 1;
+            }
+            else{
+                rows = (list.size() / 3);
+            }
+            Table.setLayout(new GridLayout(rows, 3, hgap, vgap));
+            
+            for(SoldPetDTO pet : list)
+            {
+                ProductCom product = new ProductCom(pet, this);
+                Table.add(product);
             }
         }
         Table.revalidate();
@@ -475,38 +786,38 @@ public class ProductUI extends javax.swing.JPanel {
         Table.repaint();
         
         
-        soldBus.readData();
-        soldList = soldBus.soldList;
+//        soldBus.readData();
+//        soldList = soldBus.soldList;
         
-        if(soldList.size() <= 6)
+        if(soldBus.soldList.size() <= 6)
         {
             Table.setLayout(new GridLayout(2, 3, hgap, vgap));
-            for(SoldPetDTO product : soldList)
+            for(SoldPetDTO product : soldBus.soldList)
             {
                 ProductCom productCom = new ProductCom(product, this);
                 Table.add(productCom);
             }
-            int remains = 6 - soldList.size();
+            int remains = 6 - soldBus.soldList.size();
             for(int i = 0; i < remains; i++)
             {
                 EmptyProduct emp = new EmptyProduct();
                 Table.add(emp);
             }
         }
-        else if(soldList.size() > 6)
+        else if(soldBus.soldList.size() > 6)
         {
             int rows = 0;
-            int remains = soldList.size() % 3;
+            int remains = soldBus.soldList.size() % 3;
             if(remains != 0)
             {
-                rows = (soldList.size() / 3) + 1;
+                rows = (soldBus.soldList.size() / 3) + 1;
             }
             else{
-                rows = (soldList.size() / 3);
+                rows = (soldBus.soldList.size() / 3);
             }
             Table.setLayout(new GridLayout(rows, 3, hgap, vgap));
             
-            for(SoldPetDTO product : soldList)
+            for(SoldPetDTO product : soldBus.soldList)
             {
                 ProductCom productCom = new ProductCom(product, this);
                 Table.add(productCom);
@@ -553,6 +864,7 @@ public class ProductUI extends javax.swing.JPanel {
     private javax.swing.JPanel BaseTable;
     private javax.swing.JPanel NavBar;
     private javax.swing.JPanel Table;
+    private javax.swing.JButton btnDateFilter;
     private javax.swing.JButton btnFilter;
     private javax.swing.JComboBox<String> cbbFilter;
     private javax.swing.JLabel jLabel1;

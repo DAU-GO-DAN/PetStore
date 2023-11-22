@@ -109,13 +109,16 @@ public class FindInvoiceItem extends javax.swing.JPanel {
 
     private void svgAddBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_svgAddBtnMouseClicked
         // TODO add your handling code here:
-        if(addUI.addedList.isEmpty())
+        System.out.println("quantity "+quantity);
+        
+        if(quantity < 1){
+            JOptionPane.showMessageDialog(null, "sản phẩm đã hết hàng");
+        }
+        
+        else if(addUI.addedList.isEmpty())
         {
             addUI.addProduct(product);
             addUI.editTotalAmount();
-        }
-        else if(quantity == 0){
-            JOptionPane.showMessageDialog(null, "sản phẩm đã hết hàng");
         }
         else{
             String flag = "donthave";

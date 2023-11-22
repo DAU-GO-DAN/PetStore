@@ -179,11 +179,24 @@ public class EmployeeBUS {
              
             //Tìm kiếm nhân viên theo ID chỉ cần nhập 1-2 kí tự
             if (empDTO.getId().matches(".*" + id + ".*")) {
-            return emp;
+                return emp;
             }
         
         }
         return emp;
+    }
+    
+    public String getName(String ID)
+    {
+        String name = "";
+        for(EmployeeDTO emp : empList)
+        {
+            if(emp.getId().equalsIgnoreCase(ID))
+            {
+                name = emp.getName();
+            }
+        }
+        return name;
     }
     
     private String normalizeID(String input) {
@@ -403,21 +416,6 @@ public class EmployeeBUS {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    
-    public String getName(String ID)
-    {
-        String name = "";
-        System.out.println("id : "+ID);
-        for(EmployeeDTO emp : empList)
-        {
-            if(emp.getId().equalsIgnoreCase(ID))
-            {
-                name = emp.getName();
-                System.out.println("co tim thay");
-            }
-        }
-        return name;
     }
     
     

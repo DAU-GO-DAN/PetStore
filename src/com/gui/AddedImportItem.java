@@ -127,7 +127,16 @@ public class AddedImportItem extends javax.swing.JPanel {
 
     private void QuantitySpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_QuantitySpinnerStateChanged
         // TODO add your handling code here:
+        
+        
         quantity = (int) QuantitySpinner.getValue();
+        
+        if(quantity <= 1)
+        {
+            quantity = 1;
+            QuantitySpinner.setValue(1);
+        }
+        
         
         totalAmount = product.getImportPrice() * quantity;
         lbTotalPrice.setText(""+valid.formatMoney(totalAmount));

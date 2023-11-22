@@ -42,6 +42,7 @@ public class AddProductForm extends javax.swing.JFrame {
     ProductUI ui;
     public AddProductForm(ProductUI ui) {
         this.ui = ui;
+        
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -315,8 +316,8 @@ public class AddProductForm extends javax.swing.JFrame {
         if(validInput())
         {
             PetProductDTO product = new PetProductDTO();
-            PetProductBUS productBus = new PetProductBUS();
-            String id = productBus.generateID();
+            
+            String id = ui.PetProBus.generateID();
             if(imageUrl.equals("null"))
             {
                 product.setImageUrl(imageUrl);
@@ -359,10 +360,10 @@ public class AddProductForm extends javax.swing.JFrame {
 //            System.out.println("type: "+product.getCategoryID());
 //            System.out.println("in stock : "+product.getInStock());
 //            
-            productBus.add(product);
-            JOptionPane.showMessageDialog(null, "thêm sản phẩm thành công");
+            ui.PetProBus.add(product);
+//            JOptionPane.showMessageDialog(null, "thêm sản phẩm thành công");
             this.dispose();
-            
+            ui.refreshPetProList();
         }
         else{
             JOptionPane.showMessageDialog(null, "dữ liệu trong form chưa đủ hoặc chưa chính xác");
