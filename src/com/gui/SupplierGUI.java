@@ -25,7 +25,8 @@ public class SupplierGUI extends javax.swing.JPanel {
         initComponents();
         svgAdd.setSVGImage("com/image/add.svg", 30, 30);
         svgEdit.setSVGImage("com/image/edit.svg", 40, 40);
-        svgDelete.setSVGImage("com/image/trash.svg", 30, 30);
+
+        svgDelete.setVisible(false);
         svgSearch.setSVGImage("com/image/search.svg", 30, 30);
         svgSupplier.setSVGImage("com/image/supplier.svg", 70, 70);
     }

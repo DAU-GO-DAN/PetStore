@@ -31,7 +31,7 @@ public class InvoiceGUI extends javax.swing.JPanel {
         initComponents();
         Search.setSVGImage("com/image/search.svg", 30, 30);
         Add.setSVGImage("com/image/add.svg", 30, 30);
-        delete.setSVGImage("com/image/trash.svg", 30, 30);
+       
         Xemsvg.setSVGImage("com/image/view.svg", 30, 30);
         svgImage1.setSVGImage("com/image/invoice.svg", 70, 70);
     }
@@ -61,7 +61,6 @@ public class InvoiceGUI extends javax.swing.JPanel {
         SearchTxt = new javax.swing.JTextField();
         Add = new com.gui.SvgImage();
         Reset = new com.gui.SvgImage();
-        delete = new com.gui.SvgImage();
         Xemsvg = new com.gui.SvgImage();
         jLabel1 = new javax.swing.JLabel();
         svgImage1 = new com.gui.SvgImage();
@@ -133,14 +132,6 @@ public class InvoiceGUI extends javax.swing.JPanel {
         });
         add(Reset, new org.netbeans.lib.awtextra.AbsoluteConstraints(871, 88, 50, 50));
 
-        delete.setText("de");
-        delete.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                deleteMouseClicked(evt);
-            }
-        });
-        add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 150, 30, 30));
-
         Xemsvg.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 XemsvgMouseClicked(evt);
@@ -199,19 +190,6 @@ public static boolean containsSubstring(String mainString, String subString) {
         Table.setModel(InvBUS.getModel());
     }//GEN-LAST:event_ResetMouseClicked
 
-    private void deleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseClicked
-        // TODO add your handling code here:
-//        try { 
-//          
-//            String s = (String) Table.getValueAt(Table.getSelectedRow(), 0); //Nhận giá trị tại hàng được chọn cột 0 (tức id)
-//             InvoiceDetailBUS InvDBUS = new InvoiceDetailBUS(s);
-//            InvBUS.delete(s);
-//            InvDBUS.deleteInvDT(s);
-//            
-//        } catch (Exception e) {
-//        }
-    }//GEN-LAST:event_deleteMouseClicked
-
     private void SearchTxtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SearchTxtKeyPressed
         // TODO add your handling code here:
         String input=SearchTxt.getText();
@@ -266,7 +244,6 @@ if (value != null) {
     private javax.swing.JTextField SearchTxt;
     private javax.swing.JTable Table;
     private com.gui.SvgImage Xemsvg;
-    private com.gui.SvgImage delete;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private com.gui.SvgImage svgImage1;
